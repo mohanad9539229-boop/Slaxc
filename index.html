@@ -227,12 +227,19 @@
                 <div class="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-lg border border-slate-700 text-xs">
                     <span class="text-slate-400">السيرفر:</span>
                     <select id="serverSelect" onchange="changeServer()" class="bg-transparent text-white focus:outline-none cursor-pointer">
-                        <option value="vidsrc.cc">VidSrc (الأساسي - مترجم)</option>
-                        <option value="vidsrc.me">VidSrc Me</option>
+                        <option value="vidlink">VidLink (سريع ومترجم - مستحسن)</option>
+                        <option value="autoembed">AutoEmbed (سيرفر طوارئ)</option>
+                        <option value="embedsu">Embed.su (سيرفر بديل)</option>
                         <option value="vidsrc.pro">VidSrc Pro</option>
-                        <option value="vidsrc.xyz">VidSrc XYZ</option>
+                        <option value="vidsrc.cc">VidSrc CC</option>
+                        <option value="vidsrc.me">VidSrc Me</option>
                     </select>
                 </div>
+
+                <a id="externalPlayerLink" href="#" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 flex items-center gap-1.5 transition-colors" title="فتح في نافذة خارجية">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    <span class="hidden sm:inline">فتح خارجي</span>
+                </a>
 
                 <button onclick="closePlayerModal()" class="text-slate-400 hover:text-white text-2xl px-2 transition-colors">
                     <i class="fa-solid fa-xmark"></i>
@@ -259,13 +266,13 @@
 
         <!-- Player Container -->
         <div class="relative w-full flex-grow bg-black flex items-center justify-center">
-            <iframe id="videoIframe" class="w-full h-full border-0" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+            <iframe id="videoIframe" class="w-full h-full border-0" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="no-referrer"></iframe>
         </div>
 
         <!-- Player Footer Info -->
         <div class="p-3 bg-slate-900 border-t border-slate-800 text-xs text-slate-400 flex items-center justify-between">
-            <p><i class="fa-solid fa-closed-captioning text-green-400 ml-1"></i> يتم تفعيل الترجمة من القائمة داخل المشغل نفسه.</p>
-            <p>مشغل خارجي مجاني بدون استضافة محليّة</p>
+            <p><i class="fa-solid fa-closed-captioning text-green-400 ml-1"></i> يتم تفعيل الترجمة من القائمة داخل المشغل نفسه (زر CC أو Subtitles).</p>
+            <p>إذا ظهرت شاشة سوداء، جرب تغيير السيرفر أو الضغط على "فتح خارجي".</p>
         </div>
     </div>
 
@@ -378,7 +385,7 @@
         let currentItems = [];
         let watchlist = JSON.parse(localStorage.getItem('user_watchlist') || '[]');
         let currentItemDetails = null;
-        let activeServer = 'vidsrc.cc';
+        let activeServer = 'vidlink';
 
         // Genre Mapping
         const genresMap = {
@@ -724,35 +731,47 @@
 
         function updateIframeSrc() {
             const iframe = document.getElementById('videoIframe');
+            const externalLink = document.getElementById('externalPlayerLink');
             const season = document.getElementById('seasonSelect')?.value || 1;
             const episode = document.getElementById('episodeSelect')?.value || 1;
 
             let url = '';
             
-            // VidSrc & alternative free embed providers
+            // Generate embed URLs based on chosen provider
             if (activeMediaType === 'tv') {
-                if (activeServer === 'vidsrc.me') {
-                    url = `https://vidsrc.me/embed/tv?tmdb=${activeTmdbId}&season=${season}&episode=${episode}`;
+                if (activeServer === 'vidlink') {
+                    url = `https://vidlink.pro/tv/${activeTmdbId}/${season}/${episode}`;
+                } else if (activeServer === 'autoembed') {
+                    url = `https://player.autoembed.cc/embed/tv/${activeTmdbId}/${season}/${episode}`;
+                } else if (activeServer === 'embedsu') {
+                    url = `https://embed.su/embed/tv/${activeTmdbId}/${season}/${episode}`;
                 } else if (activeServer === 'vidsrc.pro') {
                     url = `https://vidsrc.pro/embed/tv/${activeTmdbId}/${season}/${episode}`;
-                } else if (activeServer === 'vidsrc.xyz') {
-                    url = `https://vidsrc.xyz/embed/tv?tmdb=${activeTmdbId}&season=${season}&episode=${episode}`;
-                } else { // default vidsrc.cc
+                } else if (activeServer === 'vidsrc.me') {
+                    url = `https://vidsrc.me/embed/tv?tmdb=${activeTmdbId}&season=${season}&episode=${episode}`;
+                } else { // vidsrc.cc
                     url = `https://vidsrc.cc/v2/embed/tv/${activeTmdbId}/${season}/${episode}`;
                 }
             } else {
-                if (activeServer === 'vidsrc.me') {
-                    url = `https://vidsrc.me/embed/movie?tmdb=${activeTmdbId}`;
+                if (activeServer === 'vidlink') {
+                    url = `https://vidlink.pro/movie/${activeTmdbId}`;
+                } else if (activeServer === 'autoembed') {
+                    url = `https://player.autoembed.cc/embed/movie/${activeTmdbId}`;
+                } else if (activeServer === 'embedsu') {
+                    url = `https://embed.su/embed/movie/${activeTmdbId}`;
                 } else if (activeServer === 'vidsrc.pro') {
                     url = `https://vidsrc.pro/embed/movie/${activeTmdbId}`;
-                } else if (activeServer === 'vidsrc.xyz') {
-                    url = `https://vidsrc.xyz/embed/movie?tmdb=${activeTmdbId}`;
-                } else { // default vidsrc.cc
+                } else if (activeServer === 'vidsrc.me') {
+                    url = `https://vidsrc.me/embed/movie?tmdb=${activeTmdbId}`;
+                } else { // vidsrc.cc
                     url = `https://vidsrc.cc/v2/embed/movie/${activeTmdbId}`;
                 }
             }
 
             iframe.src = url;
+            if (externalLink) {
+                externalLink.href = url;
+            }
         }
 
         function closePlayerModal() {
