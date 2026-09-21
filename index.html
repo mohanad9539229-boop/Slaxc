@@ -278,7 +278,6 @@
         <!-- Player Footer Info -->
         <div class="p-2 sm:p-3 bg-slate-900 border-t border-slate-800 text-[10px] sm:text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-right shrink-0">
             <p><i class="fa-solid fa-closed-captioning text-green-400 ml-1"></i> يتم تفعيل الترجمة من القائمة داخل المشغل (زر CC أو Subtitles).</p>
-            <p class="hidden sm:block">إذا ظهرت شاشة سوداء، جرب تغيير السيرفر أو استخدام "فتح خارجي".</p>
         </div>
     </div>
 
@@ -333,31 +332,33 @@
         <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 sm:p-6 space-y-4 sm:space-y-5">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-sliders text-brand-500"></i> إعدادات مصدر البيانات (API)
+                    <i class="fa-solid fa-key text-brand-500"></i> إعدادات TMDB API
                 </h3>
                 <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-white">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
             </div>
 
-            <p class="text-xs text-slate-300 leading-relaxed">
-                يعمل <strong class="text-brand-400">سلاكس سينما</strong> بمفتاح افتراضي لـ TMDB. يمكنك إضافة مفتاحك الشخصي للحصول على نتائج أسرع وأشمل:
-            </p>
-
             <div class="space-y-2">
-                <label class="text-xs font-bold text-slate-300">مفتاح TMDB API Key الشخصي:</label>
+                <label class="text-xs font-bold text-slate-300">مفتاح TMDB API Key:</label>
                 <input type="text" id="customApiKeyInput" placeholder="أدخل مفتاح الـ API هنا..." 
                     class="w-full bg-slate-800 text-xs sm:text-sm text-white px-3 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-brand-500">
             </div>
 
-            <div class="bg-slate-800/60 p-3 rounded-xl text-[11px] text-slate-400 space-y-1">
-                <p>🔹 <strong>المشغل (VidSrc / VidLink):</strong> لا يحتاج أية مفاتيح مجاني ومفتوح كلياً.</p>
-                <p>🔹 للحصول على مفتاح مجاني: قم بالتسجيل في <a href="https://www.themoviedb.org/" target="_blank" class="text-brand-400 underline">TMDB</a>.</p>
+            <div class="bg-slate-800/60 p-3.5 rounded-xl text-xs text-slate-300 space-y-2 border border-slate-700/50">
+                <p class="font-bold text-white mb-1"><i class="fa-solid fa-circle-info text-brand-500 ml-1"></i> كيفية الحصول على مفتاح TMDB API:</p>
+                <ol class="list-decimal list-inside space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
+                    <li>قم بإنشاء حساب على موقع <a href="https://www.themoviedb.org/signup" target="_blank" class="text-brand-400 underline font-medium">TMDB</a>.</li>
+                    <li>انتقل إلى <strong>إعدادات الحساب (Account Settings)</strong> ثم اختر <strong>API</strong>.</li>
+                    <li>اضغط على <strong>Create</strong> ثم اختر <strong>Developer</strong>.</li>
+                    <li>وافِق على الشروط واملأ البيانات المطلوبة.</li>
+                    <li>انسخ <strong>API Key (v3 auth)</strong> وضعه في الخانة أعلاه.</li>
+                </ol>
             </div>
 
             <div class="flex gap-2 pt-2">
                 <button onclick="saveSettings()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-2.5 rounded-xl text-xs sm:text-sm transition-colors">
-                    حفظ التغييرات
+                    حفظ
                 </button>
                 <button onclick="closeSettingsModal()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium py-2.5 rounded-xl text-xs sm:text-sm transition-colors">
                     إلغاء
@@ -372,27 +373,23 @@
             <div class="flex items-center gap-2 text-slate-300 font-bold text-sm">
                 <i class="fa-solid fa-play-circle text-brand-500 text-lg"></i> سلاكس سينما
             </div>
-            <p class="text-[11px] sm:text-xs">جميع الأفلام والمسلسلات تُجلب عبر بروتوكولات التضمين المفتوحة (Embed API). لا نستضيف أي فيديوهات على سيرفراتنا.</p>
-            <p class="text-slate-600 text-[11px]">Slax Cinema © 2026 - TMDB Integrated</p>
+            <p class="text-slate-600 text-[11px]">Slax Cinema © 2026</p>
         </div>
     </footer>
 
     <script>
-        // API Configuration
         const DEFAULT_TMDB_KEY = "3fd2be6f0cd0516355027b003a27f5e8"; 
         let apiKey = localStorage.getItem('custom_tmdb_key') || DEFAULT_TMDB_KEY;
         const TMDB_BASE = "https://api.themoviedb.org/3";
         const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
         const BACKDROP_BASE = "https://image.tmdb.org/t/p/original";
 
-        // Application State
         let currentTab = 'home';
         let currentItems = [];
         let watchlist = JSON.parse(localStorage.getItem('user_watchlist') || '[]');
         let currentItemDetails = null;
         let activeServer = 'vidlink';
 
-        // Genre Mapping
         const genresMap = {
             28: 'أكشن', 12: 'مغامرة', 16: 'أنيميشن', 35: 'كوميديا',
             80: 'جريمة', 99: 'وثائقي', 18: 'دراما', 10751: 'عائلي',
@@ -400,7 +397,6 @@
             9648: 'غموض', 10749: 'رومانسي', 878: 'خيال علمي', 53: 'إثارة'
         };
 
-        // Fallback Catalog
         const fallbackCatalog = [
             {
                 id: 550,
@@ -436,7 +432,6 @@
             }
         ];
 
-        // Init App on Page Load
         window.onload = function() {
             initApp();
         };
