@@ -121,6 +121,10 @@
                     <i class="fa-solid fa-magnifying-glass absolute right-2.5 sm:right-3.5 top-2.5 sm:top-3 text-slate-400 text-xs sm:text-sm"></i>
                 </div>
 
+                <button onclick="openAdGuideModal()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 p-2 sm:p-2.5 rounded-full border border-slate-700/60 transition-colors shrink-0" title="حل الإعلانات المزعجة">
+                    <i class="fa-solid fa-shield-halved text-xs sm:text-sm"></i>
+                </button>
+
                 <button onclick="openSettingsModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 p-2 sm:p-2.5 rounded-full border border-slate-700/60 transition-colors shrink-0" title="إعدادات الـ API">
                     <i class="fa-solid fa-gear text-xs sm:text-sm"></i>
                 </button>
@@ -310,6 +314,13 @@
             </div>
             
             <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap shrink-0">
+                
+                <!-- AdBlock Popup Sandbox Toggle -->
+                <button id="sandboxToggleBtn" onclick="toggleSandbox()" class="bg-emerald-900/60 hover:bg-emerald-800/80 text-emerald-300 border border-emerald-600/50 text-[11px] sm:text-xs px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all" title="منع الإعلانات المنبثقة">
+                    <i class="fa-solid fa-shield-cat"></i>
+                    <span id="sandboxStatusText" class="hidden sm:inline">مانع المنبثقات: مفعل</span>
+                </button>
+
                 <div class="flex items-center gap-1.5 bg-slate-800 px-2.5 py-1 sm:py-1.5 rounded-lg border border-slate-700 text-[11px] sm:text-xs">
                     <span class="text-slate-400 shrink-0">السيرفر:</span>
                     <select id="serverSelect" onchange="changeServer()" class="bg-transparent text-white focus:outline-none cursor-pointer max-w-[120px] sm:max-w-none text-[11px] sm:text-xs">
@@ -363,12 +374,56 @@
 
         <!-- Player Container -->
         <div class="relative w-full flex-grow bg-black flex items-center justify-center overflow-hidden min-h-[250px] sm:min-h-[350px]">
-            <iframe id="videoIframe" class="w-full h-full border-0" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="no-referrer"></iframe>
+            <iframe id="videoIframe" class="w-full h-full border-0" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"></iframe>
         </div>
 
         <!-- Player Footer Info -->
         <div class="p-2 sm:p-3 bg-slate-900 border-t border-slate-800 text-[10px] sm:text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-right shrink-0">
             <p><i class="fa-solid fa-closed-captioning text-green-400 ml-1"></i> يتم تفعيل الترجمة من القائمة داخل المشغل (زر CC أو Subtitles).</p>
+            <p class="text-amber-400/90 cursor-pointer hover:underline" onclick="openAdGuideModal()"><i class="fa-solid fa-shield-halved ml-1"></i> تواجه إعلانات مزعجة؟ اضغط هنا للحل النهائي</p>
+        </div>
+    </div>
+
+    <!-- Ad Block Guide Modal -->
+    <div id="adGuideModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 sm:p-6 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-amber-400"></i> الحل النهائي للإعلانات المزعجة
+                </h3>
+                <button onclick="closeAdGuideModal()" class="text-slate-400 hover:text-white">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed">
+                <p class="font-medium text-white">سيرفرات التضمين المجانية تضع إعلانات منبثقة تلقائياً. للحصول على تجربة مشغّل خالية تماماً 100% من الإعلانات، ننصح بـ:</p>
+                
+                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/80 space-y-2">
+                    <div class="flex items-center gap-2 font-bold text-amber-400">
+                        <i class="fa-brands fa-chrome text-lg"></i> 1. استخدام إضافة uBlock Origin (للكومبيوتر)
+                    </div>
+                    <p class="text-[11px] text-slate-400">أقوى إضافة مانعة للإعلانات والنوافذ المنبثقة على متصفحات Chrome و Firefox و Edge.</p>
+                </div>
+
+                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/80 space-y-2">
+                    <div class="flex items-center gap-2 font-bold text-amber-400">
+                        <i class="fa-solid fa-compass text-lg"></i> 2. متصفح Brave (للهواتف والكومبيوتر)
+                    </div>
+                    <p class="text-[11px] text-slate-400">يتضمن مانع إعلانات تلقائي يمنع أي تبويب منبثق أو إعلان قبل ظهوره.</p>
+                </div>
+
+                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/80 space-y-2">
+                    <div class="flex items-center gap-2 font-bold text-amber-400">
+                        <i class="fa-solid fa-network-wired text-lg"></i> 3. تفعيل AdGuard DNS (للهواتف)
+                    </div>
+                    <p class="text-[11px] text-slate-400">قم بتغيير الـ DNS في إعدادات جوالك إلى <code>dns.adguard.com</code> لمنع إعلانات التطبيقات والمواقع تلقائياً.</p>
+                </div>
+            </div>
+
+            <button onclick="closeAdGuideModal()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-2.5 rounded-xl text-xs sm:text-sm transition-colors">
+                حسناً، فهمت
+            </button>
         </div>
     </div>
 
@@ -503,6 +558,7 @@
         let watchHistory = JSON.parse(localStorage.getItem('user_history') || '[]');
         let currentItemDetails = null;
         let activeServer = 'vidlink';
+        let isSandboxActive = true;
 
         const genresMap = {
             28: 'أكشن', 12: 'مغامرة', 16: 'أنيميشن', 35: 'كوميديا',
@@ -906,6 +962,22 @@
             modal.classList.remove('hidden');
         }
 
+        function toggleSandbox() {
+            isSandboxActive = !isSandboxActive;
+            const btn = document.getElementById('sandboxToggleBtn');
+            const text = document.getElementById('sandboxStatusText');
+            
+            if (isSandboxActive) {
+                btn.className = "bg-emerald-900/60 hover:bg-emerald-800/80 text-emerald-300 border border-emerald-600/50 text-[11px] sm:text-xs px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all";
+                text.textContent = "مانع المنبثقات: مفعل";
+            } else {
+                btn.className = "bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 text-[11px] sm:text-xs px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all";
+                text.textContent = "مانع المنبثقات: معطل";
+            }
+
+            updateIframeSrc();
+        }
+
         function saveToHistory(item) {
             watchHistory = watchHistory.filter(h => h.id !== item.id);
             watchHistory.unshift(item);
@@ -998,6 +1070,12 @@
             const season = document.getElementById('seasonSelect')?.value || 1;
             const episode = document.getElementById('episodeSelect')?.value || 1;
 
+            if (isSandboxActive) {
+                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation');
+            } else {
+                iframe.removeAttribute('sandbox');
+            }
+
             let url = '';
             
             if (activeMediaType === 'tv') {
@@ -1041,6 +1119,14 @@
             const iframe = document.getElementById('videoIframe');
             iframe.src = '';
             modal.classList.add('hidden');
+        }
+
+        function openAdGuideModal() {
+            document.getElementById('adGuideModal').classList.remove('hidden');
+        }
+
+        function closeAdGuideModal() {
+            document.getElementById('adGuideModal').classList.add('hidden');
         }
 
         async function playTrailer() {
