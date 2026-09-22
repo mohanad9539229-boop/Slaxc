@@ -324,19 +324,21 @@
 
                 <div class="flex items-center gap-1.5 bg-slate-800 px-2.5 py-1 sm:py-1.5 rounded-lg border border-slate-700 text-[11px] sm:text-xs">
                     <span class="text-slate-400 shrink-0">السيرفر:</span>
-                    <select id="serverSelect" onchange="changeServer()" class="bg-transparent text-white focus:outline-none cursor-pointer max-w-[120px] sm:max-w-none text-[11px] sm:text-xs">
-                        <option value="vidbinge">VidBinge (بدون إعلانات - ممتاز)</option>
-                        <option value="smashy">SmashyStream (سريع وجديد)</option>
-                        <option value="vidlink" selected>VidLink (مترجم عالي الجودة)</option>
-                        <option value="autoembed">AutoEmbed (سيرفر 2)</option>
-                        <option value="embedsu">Embed.su (بديل)</option>
-                        <option value="vidsrc.pro">VidSrc Pro</option>
+                    <select id="serverSelect" onchange="changeServer()" class="bg-transparent text-white focus:outline-none cursor-pointer max-w-[140px] sm:max-w-none text-[11px] sm:text-xs font-medium">
+                        <option value="vidsrcme" selected>VidSrc.me (الأصلي ⭐)</option>
+                        <option value="vidsrccc">VidSrc.cc (بديل أسرع)</option>
+                        <option value="vidbinge">VidBinge (بدون إعلانات)</option>
+                        <option value="smashy">SmashyStream (سريع)</option>
+                        <option value="vidlink">VidLink (مترجم عالي الجودة)</option>
+                        <option value="2embed">2Embed (تضمين سريع)</option>
+                        <option value="embedsu">Embed.su (سيرفر احتياطي)</option>
+                        <option value="vidsrc.pro">VidSrc Pro (سيرفر مباشر)</option>
                     </select>
                 </div>
 
-                <a id="externalPlayerLink" href="#" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-[11px] sm:text-xs text-slate-300 px-2.5 py-1 sm:py-1.5 rounded-lg border border-slate-700 flex items-center gap-1 transition-colors" title="فتح في نافذة خارجية">
+                <a id="externalPlayerLink" href="#" target="_blank" class="bg-brand-600 hover:bg-brand-700 text-[11px] sm:text-xs text-white px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1 transition-colors font-bold shadow" title="فتح المشغل في نافذة خارجية لتجاوز التعديل والتحقق">
                     <i class="fa-solid fa-arrow-up-right-from-square"></i>
-                    <span class="hidden sm:inline">فتح خارجي</span>
+                    <span class="hidden sm:inline">فتح خارجي (تجاوز Verification)</span>
                 </a>
 
                 <button onclick="closePlayerModal()" class="text-slate-400 hover:text-white text-xl sm:text-2xl px-2 transition-colors">
@@ -382,12 +384,12 @@
                 </div>
                 <p class="text-xs text-slate-300/90 bg-black/70 px-4 py-1.5 rounded-full border border-slate-700"><i class="fa-solid fa-shield-cat text-emerald-400 ml-1"></i> حماية سلاكس سينما: يمتص الضغطة الأولى لمنع الإعلانات المنبثقة</p>
             </div>
-            <iframe id="videoIframe" class="w-full h-full border-0 relative z-10" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="no-referrer"></iframe>
+            <iframe id="videoIframe" class="w-full h-full border-0 relative z-10" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="origin"></iframe>
         </div>
 
         <!-- Player Footer Info -->
         <div class="p-2 sm:p-3 bg-slate-900 border-t border-slate-800 text-[10px] sm:text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-right shrink-0">
-            <p><i class="fa-solid fa-shield-check text-emerald-400 ml-1"></i> الدرع الداخلي يعمل تلقائياً لمنع التبويبات المزعجة أثناء المشاهدة.</p>
+            <p><i class="fa-solid fa-circle-info text-amber-400 ml-1"></i> في حال ظهرت لك شاشة التحقق (Verification) المزعجة، قم بتغيير السيرفر إلى <b>VidSrc.me</b> أو <b>VidBinge</b> أو اضغط <b>"فتح خارجي"</b> أعلاه.</p>
             <p class="text-amber-400/90 cursor-pointer hover:underline" onclick="openAdGuideModal()"><i class="fa-solid fa-shield-halved ml-1"></i> طرق إضافية لمنع الإعلانات</p>
         </div>
     </div>
@@ -565,7 +567,7 @@
         let watchlist = JSON.parse(localStorage.getItem('user_watchlist') || '[]');
         let watchHistory = JSON.parse(localStorage.getItem('user_history') || '[]');
         let currentItemDetails = null;
-        let activeServer = 'vidbinge';
+        let activeServer = 'vidsrcme';
         let isSmartShieldActive = true;
         const originalWindowOpen = window.open;
 
@@ -1117,28 +1119,36 @@
             let url = '';
             
             if (activeMediaType === 'tv') {
-                if (activeServer === 'vidbinge') {
+                if (activeServer === 'vidsrcme') {
+                    url = `https://vidsrc.me/embed/tv?tmdb=${activeTmdbId}&season=${season}&episode=${episode}`;
+                } else if (activeServer === 'vidsrccc') {
+                    url = `https://vidsrc.cc/v2/embed/tv/${activeTmdbId}/${season}/${episode}`;
+                } else if (activeServer === 'vidbinge') {
                     url = `https://vidbinge.dev/embed/tv/${activeTmdbId}/${season}/${episode}`;
                 } else if (activeServer === 'smashy') {
                     url = `https://embed.smashystream.com/playere.php?tmdb=${activeTmdbId}&season=${season}&episode=${episode}`;
                 } else if (activeServer === 'vidlink') {
                     url = `https://vidlink.pro/tv/${activeTmdbId}/${season}/${episode}`;
-                } else if (activeServer === 'autoembed') {
-                    url = `https://player.autoembed.cc/embed/tv/${activeTmdbId}/${season}/${episode}`;
+                } else if (activeServer === '2embed') {
+                    url = `https://www.2embed.cc/embedtv/${activeTmdbId}&s=${season}&e=${episode}`;
                 } else if (activeServer === 'embedsu') {
                     url = `https://embed.su/embed/tv/${activeTmdbId}/${season}/${episode}`;
                 } else {
                     url = `https://vidsrc.pro/embed/tv/${activeTmdbId}/${season}/${episode}`;
                 }
             } else {
-                if (activeServer === 'vidbinge') {
+                if (activeServer === 'vidsrcme') {
+                    url = `https://vidsrc.me/embed/movie?tmdb=${activeTmdbId}`;
+                } else if (activeServer === 'vidsrccc') {
+                    url = `https://vidsrc.cc/v2/embed/movie/${activeTmdbId}`;
+                } else if (activeServer === 'vidbinge') {
                     url = `https://vidbinge.dev/embed/movie/${activeTmdbId}`;
                 } else if (activeServer === 'smashy') {
                     url = `https://embed.smashystream.com/playere.php?tmdb=${activeTmdbId}`;
                 } else if (activeServer === 'vidlink') {
                     url = `https://vidlink.pro/movie/${activeTmdbId}`;
-                } else if (activeServer === 'autoembed') {
-                    url = `https://player.autoembed.cc/embed/movie/${activeTmdbId}`;
+                } else if (activeServer === '2embed') {
+                    url = `https://www.2embed.cc/embed/${activeTmdbId}`;
                 } else if (activeServer === 'embedsu') {
                     url = `https://embed.su/embed/movie/${activeTmdbId}`;
                 } else {
@@ -1248,7 +1258,7 @@
             if (index >= 0) {
                 watchlist.splice(index, 1);
             } else {
-                watchlist.push(currentItemDetails);
+                watchlist.push(watchlist);
             }
             localStorage.setItem('user_watchlist', JSON.stringify(watchlist));
             updateFavButtonUI();
