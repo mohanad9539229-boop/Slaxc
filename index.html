@@ -315,21 +315,21 @@
             
             <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap shrink-0">
                 
-                <!-- AdBlock Popup Sandbox Toggle -->
-                <button id="sandboxToggleBtn" onclick="toggleSandbox()" class="bg-emerald-900/60 hover:bg-emerald-800/80 text-emerald-300 border border-emerald-600/50 text-[11px] sm:text-xs px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all" title="منع الإعلانات المنبثقة">
-                    <i class="fa-solid fa-shield-cat"></i>
-                    <span id="sandboxStatusText" class="hidden sm:inline">مانع المنبثقات: مفعل</span>
+                <!-- Smart In-Page Ad Shield Toggle (Without Sandbox) -->
+                <button id="smartShieldToggleBtn" onclick="toggleSmartShield()" class="bg-emerald-900/70 text-emerald-300 border border-emerald-500/50 text-[11px] sm:text-xs px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all shadow-sm" title="حماية داخلية متطورة لمنع الإعلانات المنبثقة بدون تعطيل المشغل">
+                    <i class="fa-solid fa-shield-halved text-emerald-400 animate-pulse"></i>
+                    <span id="smartShieldStatusText" class="hidden sm:inline">الدرع الداخلي: مفعل</span>
                 </button>
 
                 <div class="flex items-center gap-1.5 bg-slate-800 px-2.5 py-1 sm:py-1.5 rounded-lg border border-slate-700 text-[11px] sm:text-xs">
                     <span class="text-slate-400 shrink-0">السيرفر:</span>
                     <select id="serverSelect" onchange="changeServer()" class="bg-transparent text-white focus:outline-none cursor-pointer max-w-[120px] sm:max-w-none text-[11px] sm:text-xs">
-                        <option value="vidlink">VidLink (سريع ومترجم)</option>
+                        <option value="vidbinge">VidBinge (بدون إعلانات - ممتاز)</option>
+                        <option value="smashy">SmashyStream (سريع وجديد)</option>
+                        <option value="vidlink" selected>VidLink (مترجم عالي الجودة)</option>
                         <option value="autoembed">AutoEmbed (سيرفر 2)</option>
                         <option value="embedsu">Embed.su (بديل)</option>
                         <option value="vidsrc.pro">VidSrc Pro</option>
-                        <option value="vidsrc.cc">VidSrc CC</option>
-                        <option value="vidsrc.me">VidSrc Me</option>
                     </select>
                 </div>
 
@@ -365,22 +365,22 @@
             <div class="flex items-center gap-2">
                 <button onclick="prevEpisode()" class="bg-slate-700 hover:bg-slate-600 text-white px-2.5 py-1 rounded-lg border border-slate-600 text-[11px] sm:text-xs flex items-center gap-1 transition-colors">
                     <i class="fa-solid fa-chevron-right text-[10px]"></i> الحلقة السابقة
-                </button>
-                <button onclick="nextEpisode()" class="bg-brand-600 hover:bg-brand-700 text-white px-2.5 py-1 rounded-lg border border-brand-500 text-[11px] sm:text-xs flex items-center gap-1 transition-colors font-bold">
-                    الحلقة التالية <i class="fa-solid fa-chevron-left text-[10px]"></i>
-                </button>
+        <!-- Player Container with Interactive Click Absorber Shield -->
+        <div id="playerContainer" class="relative w-full flex-grow bg-black flex items-center justify-center overflow-hidden min-h-[250px] sm:min-h-[350px]">
+            <!-- Smart Ad Shield Click Interceptor Overlay -->
+            <div id="playerClickShield" onclick="handleShieldClick(event)" class="absolute inset-0 z-20 bg-slate-950/40 backdrop-blur-[2px] cursor-pointer flex flex-col items-center justify-center gap-2 transition-all">
+                <div class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs sm:text-sm shadow-xl border border-brand-400/40 flex items-center gap-2 transform hover:scale-105 transition-all">
+                    <i class="fa-solid fa-play text-sm"></i> اضغط للبدء (تشغيل آمن بدون إعلانات)
+                </div>
+                <p class="text-[10px] text-slate-300/80 bg-black/60 px-3 py-1 rounded-full"><i class="fa-solid fa-shield-cat text-emerald-400"></i> تم تفعيل امتصاص الإعلانات المنبثقة بنجاح</p>
             </div>
-        </div>
-
-        <!-- Player Container -->
-        <div class="relative w-full flex-grow bg-black flex items-center justify-center overflow-hidden min-h-[250px] sm:min-h-[350px]">
-            <iframe id="videoIframe" class="w-full h-full border-0" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="no-referrer" sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"></iframe>
+            <iframe id="videoIframe" class="w-full h-full border-0 relative z-10" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="no-referrer"></iframe>
         </div>
 
         <!-- Player Footer Info -->
         <div class="p-2 sm:p-3 bg-slate-900 border-t border-slate-800 text-[10px] sm:text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-right shrink-0">
-            <p><i class="fa-solid fa-closed-captioning text-green-400 ml-1"></i> يتم تفعيل الترجمة من القائمة داخل المشغل (زر CC أو Subtitles).</p>
-            <p class="text-amber-400/90 cursor-pointer hover:underline" onclick="openAdGuideModal()"><i class="fa-solid fa-shield-halved ml-1"></i> تواجه إعلانات مزعجة؟ اضغط هنا للحل النهائي</p>
+            <p><i class="fa-solid fa-shield-check text-emerald-400 ml-1"></i> الدرع الداخلي يعمل تلقائياً لمنع التبويبات المزعجة أثناء التشغيل.</p>
+            <p class="text-amber-400/90 cursor-pointer hover:underline" onclick="openAdGuideModal()"><i class="fa-solid fa-shield-halved ml-1"></i> طرق إضافية لمنع الإعلانات</p>
         </div>
     </div>
 
@@ -557,8 +557,31 @@
         let watchlist = JSON.parse(localStorage.getItem('user_watchlist') || '[]');
         let watchHistory = JSON.parse(localStorage.getItem('user_history') || '[]');
         let currentItemDetails = null;
-        let activeServer = 'vidlink';
-        let isSandboxActive = true;
+        let activeServer = 'vidbinge';
+        let isSmartShieldActive = true;
+        const originalWindowOpen = window.open;
+
+        // Prevent top-level page redirect hijacking from embed iframes
+        window.onbeforeunload = function() {
+            if (isSmartShieldActive) {
+                return "هل أنت تأكد من مغادرة موقع سلاكس سينما؟";
+            }
+        };
+
+        // Initialize smart window.open override
+        function applyWindowOpenInterceptor() {
+            if (isSmartShieldActive) {
+                window.open = function(url, target, features) {
+                    console.log("Slax Cinema AdShield: Blocked popup window ->", url);
+                    return null; // Suppress popup tab creation
+                };
+            } else {
+                window.open = originalWindowOpen;
+            }
+        }
+        applyWindowOpenInterceptor();
+
+        let isSandboxActive = false;
 
         const genresMap = {
             28: 'أكشن', 12: 'مغامرة', 16: 'أنيميشن', 35: 'كوميديا',
@@ -938,9 +961,15 @@
             const playerTitle = document.getElementById('playerTitle');
             const playerMediaType = document.getElementById('playerMediaType');
             const tvContainer = document.getElementById('tvSelectorContainer');
+            const clickShield = document.getElementById('playerClickShield');
 
             playerTitle.textContent = title || 'عرض الفيلم';
             playerMediaType.textContent = mediaType === 'tv' ? 'مسلسل' : 'فيلم';
+
+            // Show click shield overlay when opening new media
+            if (clickShield && isSmartShieldActive) {
+                clickShield.classList.remove('hidden');
+            }
 
             if (mediaType === 'tv') {
                 tvContainer.classList.remove('hidden');
@@ -948,6 +977,51 @@
             } else {
                 tvContainer.classList.add('hidden');
             }
+
+            saveToHistory({
+                id: tmdbId,
+                title: title,
+                type: mediaType,
+                poster_path: poster,
+                season: season,
+                episode: episode
+            });
+
+            updateIframeSrc();
+            modal.classList.remove('hidden');
+        }
+
+        function handleShieldClick(e) {
+            e.stopPropagation();
+            const clickShield = document.getElementById('playerClickShield');
+            
+            // Absorb the hidden popup click and fade out the shield
+            if (clickShield) {
+                clickShield.classList.add('hidden');
+            }
+
+            // Bring window focus back immediately
+            window.focus();
+        }
+
+        function toggleSmartShield() {
+            isSmartShieldActive = !isSmartShieldActive;
+            const btn = document.getElementById('smartShieldToggleBtn');
+            const text = document.getElementById('smartShieldStatusText');
+            const clickShield = document.getElementById('playerClickShield');
+            
+            if (isSmartShieldActive) {
+                btn.className = "bg-emerald-900/70 text-emerald-300 border border-emerald-500/50 text-[11px] sm:text-xs px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all shadow-sm";
+                text.textContent = "الدرع الداخلي: مفعل";
+                if (clickShield) clickShield.classList.remove('hidden');
+            } else {
+                btn.className = "bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 text-[11px] sm:text-xs px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all";
+                text.textContent = "الدرع الداخلي: معطل";
+                if (clickShield) clickShield.classList.add('hidden');
+            }
+
+            applyWindowOpenInterceptor();
+        }
 
             saveToHistory({
                 id: tmdbId,
@@ -1070,41 +1144,35 @@
             const season = document.getElementById('seasonSelect')?.value || 1;
             const episode = document.getElementById('episodeSelect')?.value || 1;
 
-            if (isSandboxActive) {
-                iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-presentation');
-            } else {
-                iframe.removeAttribute('sandbox');
-            }
-
             let url = '';
             
             if (activeMediaType === 'tv') {
-                if (activeServer === 'vidlink') {
+                if (activeServer === 'vidbinge') {
+                    url = `https://vidbinge.dev/embed/tv/${activeTmdbId}/${season}/${episode}`;
+                } else if (activeServer === 'smashy') {
+                    url = `https://embed.smashystream.com/playere.php?tmdb=${activeTmdbId}&season=${season}&episode=${episode}`;
+                } else if (activeServer === 'vidlink') {
                     url = `https://vidlink.pro/tv/${activeTmdbId}/${season}/${episode}`;
                 } else if (activeServer === 'autoembed') {
                     url = `https://player.autoembed.cc/embed/tv/${activeTmdbId}/${season}/${episode}`;
                 } else if (activeServer === 'embedsu') {
                     url = `https://embed.su/embed/tv/${activeTmdbId}/${season}/${episode}`;
-                } else if (activeServer === 'vidsrc.pro') {
-                    url = `https://vidsrc.pro/embed/tv/${activeTmdbId}/${season}/${episode}`;
-                } else if (activeServer === 'vidsrc.me') {
-                    url = `https://vidsrc.me/embed/tv?tmdb=${activeTmdbId}&season=${season}&episode=${episode}`;
                 } else {
-                    url = `https://vidsrc.cc/v2/embed/tv/${activeTmdbId}/${season}/${episode}`;
+                    url = `https://vidsrc.pro/embed/tv/${activeTmdbId}/${season}/${episode}`;
                 }
             } else {
-                if (activeServer === 'vidlink') {
+                if (activeServer === 'vidbinge') {
+                    url = `https://vidbinge.dev/embed/movie/${activeTmdbId}`;
+                } else if (activeServer === 'smashy') {
+                    url = `https://embed.smashystream.com/playere.php?tmdb=${activeTmdbId}`;
+                } else if (activeServer === 'vidlink') {
                     url = `https://vidlink.pro/movie/${activeTmdbId}`;
                 } else if (activeServer === 'autoembed') {
                     url = `https://player.autoembed.cc/embed/movie/${activeTmdbId}`;
                 } else if (activeServer === 'embedsu') {
                     url = `https://embed.su/embed/movie/${activeTmdbId}`;
-                } else if (activeServer === 'vidsrc.pro') {
-                    url = `https://vidsrc.pro/embed/movie/${activeTmdbId}`;
-                } else if (activeServer === 'vidsrc.me') {
-                    url = `https://vidsrc.me/embed/movie?tmdb=${activeTmdbId}`;
                 } else {
-                    url = `https://vidsrc.cc/v2/embed/movie/${activeTmdbId}`;
+                    url = `https://vidsrc.pro/embed/movie/${activeTmdbId}`;
                 }
             }
 
