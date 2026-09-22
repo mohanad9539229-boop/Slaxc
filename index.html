@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" class="dark">
 <head>
@@ -315,9 +316,9 @@
             
             <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap shrink-0">
                 
-                <!-- Smart In-Page Ad Shield Toggle (Without Sandbox) -->
-                <button id="smartShieldToggleBtn" onclick="toggleSmartShield()" class="bg-emerald-900/70 text-emerald-300 border border-emerald-500/50 text-[11px] sm:text-xs px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all shadow-sm" title="حماية داخلية متطورة لمنع الإعلانات المنبثقة بدون تعطيل المشغل">
-                    <i class="fa-solid fa-shield-halved text-emerald-400 animate-pulse"></i>
+                <!-- Smart In-Page Ad Shield Toggle -->
+                <button id="smartShieldToggleBtn" onclick="toggleSmartShield()" class="bg-emerald-900/70 text-emerald-300 border border-emerald-500/50 text-[11px] sm:text-xs px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all shadow-sm" title="حماية داخلية لمنع النوافذ المنبثقة">
+                    <i class="fa-solid fa-shield-halved text-emerald-400"></i>
                     <span id="smartShieldStatusText" class="hidden sm:inline">الدرع الداخلي: مفعل</span>
                 </button>
 
@@ -365,21 +366,28 @@
             <div class="flex items-center gap-2">
                 <button onclick="prevEpisode()" class="bg-slate-700 hover:bg-slate-600 text-white px-2.5 py-1 rounded-lg border border-slate-600 text-[11px] sm:text-xs flex items-center gap-1 transition-colors">
                     <i class="fa-solid fa-chevron-right text-[10px]"></i> الحلقة السابقة
+                </button>
+                <button onclick="nextEpisode()" class="bg-slate-700 hover:bg-slate-600 text-white px-2.5 py-1 rounded-lg border border-slate-600 text-[11px] sm:text-xs flex items-center gap-1 transition-colors">
+                    الحلقة التالية <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                </button>
+            </div>
+        </div>
+
         <!-- Player Container with Interactive Click Absorber Shield -->
         <div id="playerContainer" class="relative w-full flex-grow bg-black flex items-center justify-center overflow-hidden min-h-[250px] sm:min-h-[350px]">
             <!-- Smart Ad Shield Click Interceptor Overlay -->
-            <div id="playerClickShield" onclick="handleShieldClick(event)" class="absolute inset-0 z-20 bg-slate-950/40 backdrop-blur-[2px] cursor-pointer flex flex-col items-center justify-center gap-2 transition-all">
-                <div class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-5 py-2.5 rounded-xl text-xs sm:text-sm shadow-xl border border-brand-400/40 flex items-center gap-2 transform hover:scale-105 transition-all">
-                    <i class="fa-solid fa-play text-sm"></i> اضغط للبدء (تشغيل آمن بدون إعلانات)
+            <div id="playerClickShield" onclick="handleShieldClick(event)" class="absolute inset-0 z-20 bg-slate-950/80 backdrop-blur-sm cursor-pointer flex flex-col items-center justify-center gap-3 transition-all">
+                <div class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-3 rounded-xl text-sm sm:text-base shadow-xl border border-brand-400/40 flex items-center gap-2 transform hover:scale-105 transition-all">
+                    <i class="fa-solid fa-play text-base"></i> اضغط لبدء التشغيل الآمن
                 </div>
-                <p class="text-[10px] text-slate-300/80 bg-black/60 px-3 py-1 rounded-full"><i class="fa-solid fa-shield-cat text-emerald-400"></i> تم تفعيل امتصاص الإعلانات المنبثقة بنجاح</p>
+                <p class="text-xs text-slate-300/90 bg-black/70 px-4 py-1.5 rounded-full border border-slate-700"><i class="fa-solid fa-shield-cat text-emerald-400 ml-1"></i> حماية سلاكس سينما: يمتص الضغطة الأولى لمنع الإعلانات المنبثقة</p>
             </div>
             <iframe id="videoIframe" class="w-full h-full border-0 relative z-10" allowfullscreen allow="autoplay; encrypted-media; fullscreen; picture-in-picture" referrerpolicy="no-referrer"></iframe>
         </div>
 
         <!-- Player Footer Info -->
         <div class="p-2 sm:p-3 bg-slate-900 border-t border-slate-800 text-[10px] sm:text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-right shrink-0">
-            <p><i class="fa-solid fa-shield-check text-emerald-400 ml-1"></i> الدرع الداخلي يعمل تلقائياً لمنع التبويبات المزعجة أثناء التشغيل.</p>
+            <p><i class="fa-solid fa-shield-check text-emerald-400 ml-1"></i> الدرع الداخلي يعمل تلقائياً لمنع التبويبات المزعجة أثناء المشاهدة.</p>
             <p class="text-amber-400/90 cursor-pointer hover:underline" onclick="openAdGuideModal()"><i class="fa-solid fa-shield-halved ml-1"></i> طرق إضافية لمنع الإعلانات</p>
         </div>
     </div>
@@ -561,13 +569,6 @@
         let isSmartShieldActive = true;
         const originalWindowOpen = window.open;
 
-        // Prevent top-level page redirect hijacking from embed iframes
-        window.onbeforeunload = function() {
-            if (isSmartShieldActive) {
-                return "هل أنت تأكد من مغادرة موقع سلاكس سينما؟";
-            }
-        };
-
         // Initialize smart window.open override
         function applyWindowOpenInterceptor() {
             if (isSmartShieldActive) {
@@ -580,8 +581,6 @@
             }
         }
         applyWindowOpenInterceptor();
-
-        let isSandboxActive = false;
 
         const genresMap = {
             28: 'أكشن', 12: 'مغامرة', 16: 'أنيميشن', 35: 'كوميديا',
@@ -1023,35 +1022,6 @@
             applyWindowOpenInterceptor();
         }
 
-            saveToHistory({
-                id: tmdbId,
-                title: title,
-                type: mediaType,
-                poster_path: poster,
-                season: season,
-                episode: episode
-            });
-
-            updateIframeSrc();
-            modal.classList.remove('hidden');
-        }
-
-        function toggleSandbox() {
-            isSandboxActive = !isSandboxActive;
-            const btn = document.getElementById('sandboxToggleBtn');
-            const text = document.getElementById('sandboxStatusText');
-            
-            if (isSandboxActive) {
-                btn.className = "bg-emerald-900/60 hover:bg-emerald-800/80 text-emerald-300 border border-emerald-600/50 text-[11px] sm:text-xs px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all";
-                text.textContent = "مانع المنبثقات: مفعل";
-            } else {
-                btn.className = "bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 text-[11px] sm:text-xs px-2.5 py-1 sm:py-1.5 rounded-lg flex items-center gap-1.5 transition-all";
-                text.textContent = "مانع المنبثقات: معطل";
-            }
-
-            updateIframeSrc();
-        }
-
         function saveToHistory(item) {
             watchHistory = watchHistory.filter(h => h.id !== item.id);
             watchHistory.unshift(item);
@@ -1343,3 +1313,5 @@
     </script>
 </body>
 </html>
+
+```
