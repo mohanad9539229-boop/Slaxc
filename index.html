@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" class="dark">
 <head>
@@ -7,9 +6,9 @@
     <title>سلاكس سينما | Slax Cinema - مكتبة الأفلام والمسلسلات المترجمة</title>
     
     <!-- Website Favicon & Mobile App Icons -->
-    <link rel="icon" type="image/jpeg" href="https://i.ibb.co/ZzvmDcb8/IMG-7315.jpg">
-    <link rel="apple-touch-icon" href="https://i.ibb.co/ZzvmDcb8/IMG-7315.jpg">
-    <link rel="shortcut icon" href="https://i.ibb.co/ZzvmDcb8/IMG-7315.jpg">
+    <link rel="icon" type="image/jpeg" href="https://i.ibb.co/1kJpTCk/IMG-7958.jpg">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/1kJpTCk/IMG-7958.jpg">
+    <link rel="shortcut icon" href="https://i.ibb.co/1kJpTCk/IMG-7958.jpg">
     
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -20,12 +19,17 @@
                 extend: {
                     colors: {
                         brand: {
-                            50: '#fff1f2',
-                            100: '#ffe4e6',
-                            500: '#e11d48',
-                            600: '#e11d48',
-                            700: '#be123c',
-                            900: '#881337',
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                            800: '#9d174d',
+                            900: '#831843',
+                            950: '#500724',
                         },
                         darkbg: '#0b0f19',
                         cardbg: '#1e293b'
@@ -50,12 +54,32 @@
         * {
             box-sizing: border-box;
         }
+        html, body {
+            background-color: #0b0f19;
+        }
         body {
             font-family: 'Tajawal', sans-serif;
-            background-color: #0b0f19;
             color: #f8fafc;
             overflow-x: hidden;
             width: 100%;
+            accent-color: #ec4899;
+        }
+        .site-bg-layer {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image: url('https://i.ibb.co/JjKTJsJG/IMG-7957.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+        }
+        .site-bg-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at top center, rgba(236, 72, 153, 0.16) 0%, rgba(11, 15, 25, 0.78) 65%, rgba(11, 15, 25, 0.90) 100%);
         }
         ::-webkit-scrollbar {
             width: 6px;
@@ -65,11 +89,11 @@
             background: #0b0f19;
         }
         ::-webkit-scrollbar-thumb {
-            background: #334155;
+            background: #831843;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #e11d48;
+            background: #ec4899;
         }
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
@@ -79,35 +103,52 @@
             scrollbar-width: none;
         }
         .glass-header {
-            background: rgba(11, 15, 25, 0.92);
-            backdrop-filter: blur(12px);
+            background: rgba(11, 15, 25, 0.86);
+            backdrop-filter: blur(14px);
         }
         .movie-card:hover .card-overlay {
             opacity: 1;
         }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.25s ease-out forwards;
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between">
+<body class="min-h-screen flex flex-col justify-between relative">
+
+    <!-- Fixed Site Background & Pink-Tinted Atmospheric Overlay -->
+    <div class="site-bg-layer" aria-hidden="true"></div>
+    <div class="site-bg-overlay" aria-hidden="true"></div>
 
     <!-- Header / Navbar -->
-    <header class="fixed top-0 left-0 right-0 z-40 glass-header border-b border-slate-800/80 transition-all duration-300">
+    <header class="fixed top-0 left-0 right-0 z-40 glass-header border-b border-brand-500/20 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
             
             <!-- Logo & Navigation -->
             <div class="flex items-center gap-4 lg:gap-8 min-w-0">
-                <a href="#" onclick="switchTab('home')" class="flex items-center gap-2 text-lg sm:text-2xl font-black text-brand-500 tracking-wider shrink-0">
-                    <img src="https://i.ibb.co/ZzvmDcb8/IMG-7315.jpg" alt="Logo" class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg object-cover border border-brand-500/50 shadow-md">
+                <a href="#" onclick="switchTab('home')" class="flex items-center gap-2 text-lg sm:text-2xl font-black text-brand-400 tracking-wider shrink-0">
+                    <img src="https://i.ibb.co/1kJpTCk/IMG-7958.jpg" alt="Logo" class="w-8 h-8 sm:w-10 sm:h-10 rounded-lg object-cover border border-brand-500/60 shadow-md shadow-brand-500/20">
                     <span>سلاكس<span class="text-white"> سينما</span></span>
                 </a>
 
                 <nav class="hidden md:flex items-center gap-4 lg:gap-6 font-medium text-slate-300 text-sm lg:text-base">
-                    <button onclick="switchTab('home')" id="nav-home" class="hover:text-brand-500 transition-colors py-1 text-white border-b-2 border-brand-500 font-bold">الرئيسية</button>
-                    <button onclick="switchTab('movies')" id="nav-movies" class="hover:text-brand-500 transition-colors py-1">الأفلام</button>
-                    <button onclick="switchTab('tv')" id="nav-tv" class="hover:text-brand-500 transition-colors py-1">المسلسلات</button>
-                    <button onclick="switchTab('watchlist')" id="nav-watchlist" class="hover:text-brand-500 transition-colors py-1 flex items-center gap-1.5">
+                    <button onclick="switchTab('home')" id="nav-home" class="hover:text-brand-400 transition-colors py-1 text-white border-b-2 border-brand-500 font-bold">الرئيسية</button>
+                    <button onclick="switchTab('movies')" id="nav-movies" class="hover:text-brand-400 transition-colors py-1">الأفلام</button>
+                    <button onclick="switchTab('tv')" id="nav-tv" class="hover:text-brand-400 transition-colors py-1">المسلسلات</button>
+                    <button onclick="switchTab('watchlist')" id="nav-watchlist" class="hover:text-brand-400 transition-colors py-1 flex items-center gap-1.5">
                         <i class="fa-solid fa-bookmark text-xs"></i> المفضلة
                     </button>
-                    <button onclick="switchTab('history')" id="nav-history" class="hover:text-brand-500 transition-colors py-1 flex items-center gap-1.5">
+                    <button onclick="switchTab('history')" id="nav-history" class="hover:text-brand-400 transition-colors py-1 flex items-center gap-1.5">
                         <i class="fa-solid fa-clock-rotate-left text-xs"></i> السجل
                     </button>
                 </nav>
@@ -117,16 +158,16 @@
             <div class="flex items-center gap-2 sm:gap-3 shrink-0">
                 <div class="relative w-36 sm:w-52 md:w-64 lg:w-72">
                     <input type="text" id="searchInput" placeholder="ابحث..." 
-                        class="w-full bg-slate-800/80 text-xs sm:text-sm text-white placeholder-slate-400 rounded-full py-2 pr-8 sm:pr-10 pl-3 border border-slate-700/60 focus:outline-none focus:border-brand-500 transition-all"
+                        class="w-full bg-slate-800/80 text-xs sm:text-sm text-white placeholder-slate-400 rounded-full py-2 pr-8 sm:pr-10 pl-3 border border-brand-500/25 focus:outline-none focus:border-brand-500 transition-all"
                         onkeyup="handleSearch(event)">
-                    <i class="fa-solid fa-magnifying-glass absolute right-2.5 sm:right-3.5 top-2.5 sm:top-3 text-slate-400 text-xs sm:text-sm"></i>
+                    <i class="fa-solid fa-magnifying-glass absolute right-2.5 sm:right-3.5 top-2.5 sm:top-3 text-brand-400/80 text-xs sm:text-sm"></i>
                 </div>
 
-                <button onclick="openAdGuideModal()" class="bg-slate-800 hover:bg-slate-700 text-amber-400 p-2 sm:p-2.5 rounded-full border border-slate-700/60 transition-colors shrink-0" title="نصائح حجب الإعلانات">
+                <button onclick="openAdGuideModal()" class="bg-slate-800/85 hover:bg-slate-700 text-amber-400 p-2 sm:p-2.5 rounded-full border border-brand-500/25 transition-colors shrink-0" title="نصائح حجب الإعلانات">
                     <i class="fa-solid fa-shield-halved text-xs sm:text-sm"></i>
                 </button>
 
-                <button onclick="openSettingsModal()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 p-2 sm:p-2.5 rounded-full border border-slate-700/60 transition-colors shrink-0" title="إعدادات الـ API">
+                <button onclick="openSettingsModal()" class="bg-slate-800/85 hover:bg-slate-700 text-brand-300 p-2 sm:p-2.5 rounded-full border border-brand-500/25 transition-colors shrink-0" title="إعدادات الـ API">
                     <i class="fa-solid fa-gear text-xs sm:text-sm"></i>
                 </button>
             </div>
@@ -134,51 +175,51 @@
         </div>
 
         <!-- Mobile Nav bar bottom -->
-        <div class="md:hidden flex justify-around bg-slate-900/95 border-t border-slate-800/80 py-2 text-[11px] sm:text-xs text-slate-400">
-            <button onclick="switchTab('home')" class="flex flex-col items-center gap-1 text-brand-500">
+        <div class="md:hidden flex justify-around bg-slate-900/90 border-t border-brand-500/20 py-2 text-[11px] sm:text-xs text-slate-400">
+            <button onclick="switchTab('home')" id="mobile-nav-home" class="flex flex-col items-center gap-1 text-brand-400 font-bold">
                 <i class="fa-solid fa-house text-sm"></i> الرئيسية
             </button>
-            <button onclick="switchTab('movies')" class="flex flex-col items-center gap-1">
+            <button onclick="switchTab('movies')" id="mobile-nav-movies" class="flex flex-col items-center gap-1">
                 <i class="fa-solid fa-film text-sm"></i> الأفلام
             </button>
-            <button onclick="switchTab('tv')" class="flex flex-col items-center gap-1">
+            <button onclick="switchTab('tv')" id="mobile-nav-tv" class="flex flex-col items-center gap-1">
                 <i class="fa-solid fa-tv text-sm"></i> المسلسلات
             </button>
-            <button onclick="switchTab('watchlist')" class="flex flex-col items-center gap-1">
+            <button onclick="switchTab('watchlist')" id="mobile-nav-watchlist" class="flex flex-col items-center gap-1">
                 <i class="fa-solid fa-bookmark text-sm"></i> المفضلة
             </button>
-            <button onclick="switchTab('history')" class="flex flex-col items-center gap-1">
+            <button onclick="switchTab('history')" id="mobile-nav-history" class="flex flex-col items-center gap-1">
                 <i class="fa-solid fa-clock-rotate-left text-sm"></i> السجل
             </button>
         </div>
     </header>
 
-    <main class="pt-16 sm:pt-20 flex-grow w-full">
+    <main class="pt-16 sm:pt-20 flex-grow w-full relative z-10">
 
         <!-- Hero Section Banner -->
-        <div id="heroBanner" class="relative w-full h-[50vh] sm:h-[60vh] lg:h-[65vh] min-h-[360px] max-h-[600px] bg-slate-900 overflow-hidden hidden">
+        <div id="heroBanner" class="relative w-full h-[50vh] sm:h-[60vh] lg:h-[65vh] min-h-[360px] max-h-[600px] bg-slate-900/75 overflow-hidden hidden border-b border-brand-500/15">
             <div id="heroBackdrop" class="absolute inset-0 bg-cover bg-center transition-all duration-700"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-[#0b0f19]/60 to-transparent"></div>
-            <div class="absolute inset-0 bg-gradient-to-r from-[#0b0f19] via-[#0b0f19]/80 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19]/95 via-[#0b0f19]/60 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-r from-[#0b0f19]/95 via-[#0b0f19]/75 to-transparent"></div>
             
             <div class="relative max-w-7xl mx-auto h-full px-4 sm:px-6 lg:px-8 flex items-end pb-8 sm:pb-12">
                 <div class="max-w-2xl space-y-2.5 sm:space-y-4">
-                    <div class="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-brand-500 bg-brand-500/10 px-2.5 sm:px-3 py-1 rounded-full w-fit border border-brand-500/20">
+                    <div class="flex items-center gap-1.5 text-[11px] sm:text-xs font-bold text-brand-400 bg-brand-500/15 px-2.5 sm:px-3 py-1 rounded-full w-fit border border-brand-500/30">
                         <i class="fa-solid fa-fire"></i> الأبرز اليوم على سلاكس سينما
                     </div>
                     <h1 id="heroTitle" class="text-xl sm:text-3xl md:text-5xl font-black text-white leading-tight truncate max-w-full">...</h1>
                     <div class="flex items-center gap-2.5 sm:gap-4 text-xs sm:text-sm text-slate-300 font-medium">
                         <span id="heroRating" class="text-yellow-400 font-bold flex items-center gap-1"><i class="fa-solid fa-star"></i> -</span>
-                        <span id="heroYear" class="bg-slate-800 px-2 py-0.5 rounded border border-slate-700">2024</span>
-                        <span id="heroType" class="bg-slate-800/80 px-2 py-0.5 rounded border border-slate-700 uppercase">Movie</span>
+                        <span id="heroYear" class="bg-slate-800/90 px-2 py-0.5 rounded border border-brand-500/20">2024</span>
+                        <span id="heroType" class="bg-brand-500/15 text-brand-300 px-2 py-0.5 rounded border border-brand-500/30 uppercase">Movie</span>
                     </div>
                     <p id="heroOverview" class="text-slate-300 text-xs sm:text-sm md:text-base line-clamp-2 sm:line-clamp-3 leading-relaxed">...</p>
                     
                     <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 pt-2">
-                        <button id="heroWatchBtn" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl flex items-center gap-2 text-xs sm:text-sm transition-all shadow-lg shadow-brand-600/30 hover:scale-105">
+                        <button id="heroWatchBtn" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl flex items-center gap-2 text-xs sm:text-sm transition-all shadow-lg shadow-brand-600/35 hover:scale-105">
                             <i class="fa-solid fa-play"></i> شاهد الآن
                         </button>
-                        <button id="heroDetailBtn" class="bg-slate-800/80 hover:bg-slate-700 text-white font-medium px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl flex items-center gap-2 text-xs sm:text-sm border border-slate-700 transition-all">
+                        <button id="heroDetailBtn" class="bg-slate-800/85 hover:bg-slate-700 text-white font-medium px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl flex items-center gap-2 text-xs sm:text-sm border border-brand-500/25 transition-all">
                             <i class="fa-solid fa-circle-info"></i> التفاصيل
                         </button>
                     </div>
@@ -190,9 +231,9 @@
         <div id="continueWatchingSection" class="hidden max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-6">
             <div class="flex items-center justify-between mb-3">
                 <h3 class="text-sm sm:text-base font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-clock-rotate-left text-brand-500"></i> متابعة المشاهدة
+                    <i class="fa-solid fa-clock-rotate-left text-brand-400"></i> متابعة المشاهدة
                 </h3>
-                <button onclick="clearHistory()" class="text-[11px] sm:text-xs text-slate-400 hover:text-red-400 transition-colors">
+                <button onclick="clearHistory()" class="text-[11px] sm:text-xs text-slate-300 hover:text-brand-400 transition-colors">
                     مسح السجل
                 </button>
             </div>
@@ -206,15 +247,15 @@
             <div class="flex items-center justify-between gap-2 overflow-x-auto pb-2 hide-scrollbar text-xs sm:text-sm max-w-full">
                 <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar" id="genreFilters">
                     <button onclick="filterByGenre('all', event)" class="genre-btn active-genre bg-brand-600 text-white font-medium px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0">الكل</button>
-                    <button onclick="filterByGenre(28, event)" class="genre-btn bg-slate-800 hover:bg-slate-700 text-slate-300 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0">أكشن</button>
-                    <button onclick="filterByGenre(35, event)" class="genre-btn bg-slate-800 hover:bg-slate-700 text-slate-300 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0">كوميديا</button>
-                    <button onclick="filterByGenre(18, event)" class="genre-btn bg-slate-800 hover:bg-slate-700 text-slate-300 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0">دراما</button>
-                    <button onclick="filterByGenre(27, event)" class="genre-btn bg-slate-800 hover:bg-slate-700 text-slate-300 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0">رعب</button>
-                    <button onclick="filterByGenre(878, event)" class="genre-btn bg-slate-800 hover:bg-slate-700 text-slate-300 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0">خيال علمي</button>
-                    <button onclick="filterByGenre(16, event)" class="genre-btn bg-slate-800 hover:bg-slate-700 text-slate-300 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0">أنيميشن</button>
+                    <button onclick="filterByGenre(28, event)" class="genre-btn bg-slate-800/85 hover:bg-slate-700 text-slate-300 border border-brand-500/20 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0">أكشن</button>
+                    <button onclick="filterByGenre(35, event)" class="genre-btn bg-slate-800/85 hover:bg-slate-700 text-slate-300 border border-brand-500/20 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0">كوميديا</button>
+                    <button onclick="filterByGenre(18, event)" class="genre-btn bg-slate-800/85 hover:bg-slate-700 text-slate-300 border border-brand-500/20 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0">دراما</button>
+                    <button onclick="filterByGenre(27, event)" class="genre-btn bg-slate-800/85 hover:bg-slate-700 text-slate-300 border border-brand-500/20 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0">رعب</button>
+                    <button onclick="filterByGenre(878, event)" class="genre-btn bg-slate-800/85 hover:bg-slate-700 text-slate-300 border border-brand-500/20 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0">خيال علمي</button>
+                    <button onclick="filterByGenre(16, event)" class="genre-btn bg-slate-800/85 hover:bg-slate-700 text-slate-300 border border-brand-500/20 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0">أنيميشن</button>
                 </div>
 
-                <button onclick="toggleAdvancedFilterModal()" class="bg-slate-800 hover:bg-slate-700 text-brand-400 border border-slate-700 px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 shrink-0 transition-colors">
+                <button onclick="toggleAdvancedFilterModal()" class="bg-slate-800/85 hover:bg-slate-700 text-brand-400 border border-brand-500/30 px-3 py-1.5 rounded-full text-xs font-medium flex items-center gap-1.5 shrink-0 transition-colors">
                     <i class="fa-solid fa-sliders text-brand-500"></i> فلترة متقدمة
                 </button>
             </div>
@@ -229,11 +270,11 @@
                     <span class="w-1.5 h-5 sm:h-6 bg-brand-500 rounded-full inline-block"></span>
                     الأفلام والمسلسلات الشائعة
                 </h2>
-                <span id="resultCount" class="text-xs sm:text-sm text-slate-400"></span>
+                <span id="resultCount" class="text-xs sm:text-sm text-brand-300"></span>
             </div>
 
             <!-- Loader Spinner -->
-            <div id="loader" class="flex flex-col items-center justify-center py-20 text-slate-400 gap-3">
+            <div id="loader" class="flex flex-col items-center justify-center py-20 text-slate-300 gap-3">
                 <i class="fa-solid fa-circle-notch fa-spin text-3xl sm:text-4xl text-brand-500"></i>
                 <p class="text-xs sm:text-sm">جاري تحميل العروض والمكتبة...</p>
             </div>
@@ -244,10 +285,10 @@
             </div>
 
             <!-- Empty State -->
-            <div id="emptyState" class="hidden flex-col items-center justify-center py-16 text-center space-y-3">
-                <i class="fa-solid fa-film text-5xl sm:text-6xl text-slate-700"></i>
-                <p class="text-slate-400 text-sm sm:text-lg">لم يتم العثور على نتائج تطابق بحثك</p>
-                <button onclick="loadTrending()" class="bg-brand-600 text-white px-4 py-2 rounded-lg text-xs sm:text-sm">العودة للرئيسية</button>
+            <div id="emptyState" class="hidden flex-col items-center justify-center py-16 text-center space-y-3 bg-slate-900/75 backdrop-blur-md rounded-2xl border border-brand-500/20">
+                <i class="fa-solid fa-film text-5xl sm:text-6xl text-brand-500/40"></i>
+                <p class="text-slate-300 text-sm sm:text-lg">لم يتم العثور على نتائج تطابق بحثك</p>
+                <button onclick="loadTrending()" class="bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg text-xs sm:text-sm transition-colors">العودة للرئيسية</button>
             </div>
 
         </div>
@@ -256,8 +297,8 @@
 
     <!-- Entry Welcome / Ad-Blocker Notice Modal -->
     <div id="welcomeNoticeModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-amber-500/30 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl text-center relative animate-fade-in">
-            <div class="w-16 h-16 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto text-amber-400 border border-amber-500/20">
+        <div class="bg-slate-900/95 border border-brand-500/35 rounded-2xl w-full max-w-md p-6 space-y-4 shadow-2xl shadow-brand-900/30 text-center relative animate-fade-in">
+            <div class="w-16 h-16 bg-brand-500/15 rounded-full flex items-center justify-center mx-auto text-brand-400 border border-brand-500/30">
                 <i class="fa-solid fa-shield-halved text-3xl"></i>
             </div>
 
@@ -266,8 +307,8 @@
                 <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
                     تستعين سيرفرات التشغيل المجانية بإعلانات منبثقة خارجة عن إرادتنا عند الضغط على الشاشة.
                 </p>
-                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/80 text-right space-y-1 mt-3">
-                    <p class="text-xs font-bold text-amber-400"><i class="fa-solid fa-circle-check ml-1"></i> نصيحة لمشاهدة بدون إعلانات:</p>
+                <div class="bg-slate-800/80 p-3 rounded-xl border border-brand-500/25 text-right space-y-1 mt-3">
+                    <p class="text-xs font-bold text-brand-400"><i class="fa-solid fa-circle-check ml-1"></i> نصيحة لمشاهدة بدون إعلانات:</p>
                     <p class="text-[11px] text-slate-300">نوصي باستخدام متصفح <strong class="text-white">Brave</strong> أو تطبيق <strong class="text-white">uBlock Origin</strong> أو تفعيل <strong class="text-white">AdGuard DNS</strong> لمنع الإعلانات كلياً.</p>
                 </div>
             </div>
@@ -285,7 +326,7 @@
 
     <!-- Advanced Filter Modal -->
     <div id="advancedFilterModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 space-y-4">
+        <div class="bg-slate-900/95 border border-brand-500/25 rounded-2xl w-full max-w-md p-5 space-y-4">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <h3 class="text-base font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-sliders text-brand-500"></i> الفلترة المتقدمة
@@ -337,14 +378,14 @@
     <div id="playerModal" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-md hidden flex flex-col justify-between overflow-hidden">
         
         <!-- Player Header -->
-        <div class="p-2.5 sm:p-4 bg-slate-900/90 border-b border-slate-800 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 sm:gap-4 shrink-0">
+        <div class="p-2.5 sm:p-4 bg-slate-900/90 border-b border-brand-500/20 flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 sm:gap-4 shrink-0">
             <div class="flex items-center gap-2 min-w-0 max-w-full">
                 <span class="bg-brand-600 text-white text-[10px] sm:text-xs px-2 py-0.5 rounded font-bold shrink-0" id="playerMediaType">MOVIE</span>
                 <h3 id="playerTitle" class="text-sm sm:text-base font-bold text-white truncate max-w-[180px] sm:max-w-xs md:max-w-md">اسم الفيلم</h3>
             </div>
             
             <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap sm:flex-nowrap shrink-0">
-                <div class="flex items-center gap-1.5 bg-slate-800 px-2.5 py-1 sm:py-1.5 rounded-lg border border-slate-700 text-[11px] sm:text-xs">
+                <div class="flex items-center gap-1.5 bg-slate-800 px-2.5 py-1 sm:py-1.5 rounded-lg border border-brand-500/25 text-[11px] sm:text-xs">
                     <span class="text-slate-400 shrink-0">السيرفر:</span>
                     <select id="serverSelect" onchange="changeServer()" class="bg-transparent text-white focus:outline-none cursor-pointer max-w-[140px] sm:max-w-none text-[11px] sm:text-xs font-medium">
                         <option value="vidsrcme" selected>VidSrc.me (الأصلي ⭐)</option>
@@ -370,7 +411,7 @@
         </div>
 
         <!-- TV Show Episode & Season Selector with Next/Prev Buttons -->
-        <div id="tvSelectorContainer" class="hidden bg-slate-800/90 px-3 sm:px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs border-b border-slate-700 shrink-0">
+        <div id="tvSelectorContainer" class="hidden bg-slate-800/90 px-3 sm:px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs border-b border-brand-500/20 shrink-0">
             <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
                 <div class="flex items-center gap-1.5">
                     <span class="text-slate-400">الموسم:</span>
@@ -388,10 +429,10 @@
 
             <!-- Next & Previous Episode Controls -->
             <div class="flex items-center gap-2">
-                <button onclick="prevEpisode()" class="bg-slate-700 hover:bg-slate-600 text-white px-2.5 py-1 rounded-lg border border-slate-600 text-[11px] sm:text-xs flex items-center gap-1 transition-colors">
+                <button onclick="prevEpisode()" class="bg-slate-700 hover:bg-brand-700 text-white px-2.5 py-1 rounded-lg border border-slate-600 text-[11px] sm:text-xs flex items-center gap-1 transition-colors">
                     <i class="fa-solid fa-chevron-right text-[10px]"></i> الحلقة السابقة
                 </button>
-                <button onclick="nextEpisode()" class="bg-slate-700 hover:bg-slate-600 text-white px-2.5 py-1 rounded-lg border border-slate-600 text-[11px] sm:text-xs flex items-center gap-1 transition-colors">
+                <button onclick="nextEpisode()" class="bg-slate-700 hover:bg-brand-700 text-white px-2.5 py-1 rounded-lg border border-slate-600 text-[11px] sm:text-xs flex items-center gap-1 transition-colors">
                     الحلقة التالية <i class="fa-solid fa-chevron-left text-[10px]"></i>
                 </button>
             </div>
@@ -406,18 +447,18 @@
         </div>
 
         <!-- Player Footer Info -->
-        <div class="p-2 sm:p-3 bg-slate-900 border-t border-slate-800 text-[10px] sm:text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-right shrink-0">
-            <p><i class="fa-solid fa-circle-info text-amber-400 ml-1"></i> إذا ظهرت لك إعلانات منبثقة عند الضغط، ننصح بتفعيل تطبيق أو متصفح مانع الإعلانات.</p>
-            <p class="text-amber-400/90 cursor-pointer hover:underline" onclick="openAdGuideModal()"><i class="fa-solid fa-shield-halved ml-1"></i> طرق حجب الإعلانات الموصى بها</p>
+        <div class="p-2 sm:p-3 bg-slate-900 border-t border-brand-500/20 text-[10px] sm:text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-1 text-center sm:text-right shrink-0">
+            <p><i class="fa-solid fa-circle-info text-brand-400 ml-1"></i> إذا ظهرت لك إعلانات منبثقة عند الضغط، ننصح بتفعيل تطبيق أو متصفح مانع الإعلانات.</p>
+            <p class="text-brand-400/90 cursor-pointer hover:underline" onclick="openAdGuideModal()"><i class="fa-solid fa-shield-halved ml-1"></i> طرق حجب الإعلانات الموصى بها</p>
         </div>
     </div>
 
     <!-- Ad Block Guide Modal -->
     <div id="adGuideModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 sm:p-6 space-y-4">
+        <div class="bg-slate-900/95 border border-brand-500/25 rounded-2xl w-full max-w-md p-5 sm:p-6 space-y-4">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <h3 class="text-base font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-shield-halved text-amber-400"></i> كيفية تجنب الإعلانات المزعجة
+                    <i class="fa-solid fa-shield-halved text-brand-400"></i> كيفية تجنب الإعلانات المزعجة
                 </h3>
                 <button onclick="closeAdGuideModal()" class="text-slate-400 hover:text-white">
                     <i class="fa-solid fa-xmark"></i>
@@ -427,22 +468,22 @@
             <div class="space-y-3 text-xs sm:text-sm text-slate-300 leading-relaxed">
                 <p class="font-medium text-white">سيرفرات المشغلات الخارجية المجانية تضع إعلانات منبثقة. للحصول على أفضل تجربة بدون إعلانات نهائياً:</p>
                 
-                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/80 space-y-2">
-                    <div class="flex items-center gap-2 font-bold text-amber-400">
+                <div class="bg-slate-800/80 p-3 rounded-xl border border-brand-500/20 space-y-2">
+                    <div class="flex items-center gap-2 font-bold text-brand-400">
                         <i class="fa-solid fa-compass text-lg"></i> 1. استخدام متصفح Brave (تطبيق الجوال)
                     </div>
-                    <p class="text-[11px] text-slate-400">متصفح ممتازة يمنع الإعلانات والنوافذ المنبثقة تلقائياً دون أي ضبط.</p>
+                    <p class="text-[11px] text-slate-400">متصفح ممتاز يمنع الإعلانات والنوافذ المنبثقة تلقائياً دون أي ضبط.</p>
                 </div>
 
-                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/80 space-y-2">
-                    <div class="flex items-center gap-2 font-bold text-amber-400">
+                <div class="bg-slate-800/80 p-3 rounded-xl border border-brand-500/20 space-y-2">
+                    <div class="flex items-center gap-2 font-bold text-brand-400">
                         <i class="fa-brands fa-chrome text-lg"></i> 2. إضافة uBlock Origin (للكومبيوتر)
                     </div>
                     <p class="text-[11px] text-slate-400">أفضل إضافة حظر إعلانات متوفرة لجميع متصفحات الكومبيوتر.</p>
                 </div>
 
-                <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700/80 space-y-2">
-                    <div class="flex items-center gap-2 font-bold text-amber-400">
+                <div class="bg-slate-800/80 p-3 rounded-xl border border-brand-500/20 space-y-2">
+                    <div class="flex items-center gap-2 font-bold text-brand-400">
                         <i class="fa-solid fa-network-wired text-lg"></i> 3. AdGuard DNS (للأيفون والأندرويد)
                     </div>
                     <p class="text-[11px] text-slate-400">في إعدادات الـ DNS بالجوال اكتب: <code>dns.adguard.com</code> لمنع الإعلانات في كل المواقع.</p>
@@ -457,10 +498,10 @@
 
     <!-- YouTube Trailer Modal -->
     <div id="trailerModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden flex flex-col justify-center items-center p-3 sm:p-6">
-        <div class="w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl relative flex flex-col">
+        <div class="w-full max-w-4xl bg-slate-900 border border-brand-500/25 rounded-2xl overflow-hidden shadow-2xl relative flex flex-col">
             <div class="p-3 sm:p-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
                 <h3 id="trailerTitle" class="font-bold text-white text-xs sm:text-base flex items-center gap-2">
-                    <i class="fa-brands fa-youtube text-red-500 text-lg"></i> الإعلان التشويقي (التريلر)
+                    <i class="fa-brands fa-youtube text-brand-500 text-lg"></i> الإعلان التشويقي (التريلر)
                 </h3>
                 <button onclick="closeTrailerModal()" class="text-slate-400 hover:text-white text-xl px-2">
                     <i class="fa-solid fa-xmark"></i>
@@ -474,7 +515,7 @@
 
     <!-- Movie Details Modal -->
     <div id="detailsModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl relative max-h-[92vh] sm:max-h-[90vh] flex flex-col">
+        <div class="bg-slate-900/95 border border-brand-500/25 rounded-2xl w-full max-w-3xl overflow-hidden shadow-2xl relative max-h-[92vh] sm:max-h-[90vh] flex flex-col">
             <button onclick="closeDetailsModal()" class="absolute top-3 left-3 z-10 bg-black/60 text-white w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center hover:bg-brand-600 transition-colors">
                 <i class="fa-solid fa-xmark text-sm sm:text-base"></i>
             </button>
@@ -486,7 +527,7 @@
 
                 <div class="p-4 sm:p-6 -mt-16 sm:-mt-20 relative space-y-4 sm:space-y-6">
                     <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-center sm:items-start text-center sm:text-right">
-                        <img id="detailsPoster" class="w-28 sm:w-36 rounded-xl shadow-xl border-2 border-slate-700 bg-slate-800 shrink-0" src="" alt="Poster">
+                        <img id="detailsPoster" class="w-28 sm:w-36 rounded-xl shadow-xl border-2 border-brand-500/40 bg-slate-800 shrink-0" src="" alt="Poster">
                         <div class="space-y-2 sm:space-y-3 flex-1 min-w-0">
                             <h2 id="detailsTitle" class="text-xl sm:text-2xl font-black text-white">...</h2>
                             <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 text-xs">
@@ -510,8 +551,8 @@
                             <i class="fa-solid fa-play"></i> ابدأ المشاهدة
                         </button>
 
-                        <button id="detailsTrailerBtn" onclick="playTrailer()" class="w-full sm:w-auto bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30 px-4 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-colors">
-                            <i class="fa-brands fa-youtube text-red-500 text-base"></i> التريلر
+                        <button id="detailsTrailerBtn" onclick="playTrailer()" class="w-full sm:w-auto bg-brand-500/15 hover:bg-brand-500/25 text-brand-300 border border-brand-500/30 px-4 py-2.5 sm:py-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 transition-colors">
+                            <i class="fa-brands fa-youtube text-brand-400 text-base"></i> التريلر
                         </button>
 
                         <button id="detailsFavBtn" onclick="toggleFavoriteCurrent()" class="w-full sm:w-auto bg-slate-800 hover:bg-slate-700 text-white px-4 py-2.5 sm:py-3 rounded-xl border border-slate-700 text-xs sm:text-sm transition-colors flex items-center justify-center gap-2">
@@ -525,7 +566,7 @@
 
     <!-- API Key & Settings Modal -->
     <div id="settingsModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 sm:p-6 space-y-4 sm:space-y-5">
+        <div class="bg-slate-900/95 border border-brand-500/25 rounded-2xl w-full max-w-md p-5 sm:p-6 space-y-4 sm:space-y-5">
             <div class="flex items-center justify-between border-b border-slate-800 pb-3">
                 <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
                     <i class="fa-solid fa-key text-brand-500"></i> إعدادات TMDB API
@@ -541,7 +582,7 @@
                     class="w-full bg-slate-800 text-xs sm:text-sm text-white px-3 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-brand-500">
             </div>
 
-            <div class="bg-slate-800/60 p-3.5 rounded-xl text-xs text-slate-300 space-y-2 border border-slate-700/50">
+            <div class="bg-slate-800/60 p-3.5 rounded-xl text-xs text-slate-300 space-y-2 border border-brand-500/20">
                 <p class="font-bold text-white mb-1"><i class="fa-solid fa-circle-info text-brand-500 ml-1"></i> كيفية الحصول على مفتاح TMDB API:</p>
                 <ol class="list-decimal list-inside space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
                     <li>قم بإنشاء حساب على موقع <a href="https://www.themoviedb.org/signup" target="_blank" class="text-brand-400 underline font-medium">TMDB</a>.</li>
@@ -564,17 +605,17 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-slate-950 border-t border-slate-800/80 mt-12 sm:mt-16 py-6 sm:py-8 text-center text-xs text-slate-500 space-y-2">
+    <footer class="relative z-10 bg-slate-950/85 backdrop-blur-md border-t border-brand-500/20 mt-12 sm:mt-16 py-6 sm:py-8 text-center text-xs text-slate-400 space-y-2">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
-            <div class="flex items-center gap-2 text-slate-300 font-bold text-sm">
-                <img src="https://i.ibb.co/ZzvmDcb8/IMG-7315.jpg" alt="Logo" class="w-6 h-6 rounded object-cover"> سلاكس سينما
+            <div class="flex items-center gap-2 text-brand-300 font-bold text-sm">
+                <img src="https://i.ibb.co/1kJpTCk/IMG-7958.jpg" alt="Logo" class="w-6 h-6 rounded object-cover border border-brand-500/40"> سلاكس سينما
             </div>
-            <p class="text-slate-600 text-[11px]">Slax Cinema © 2026</p>
+            <p class="text-slate-500 text-[11px]">Slax Cinema © 2026</p>
         </div>
     </footer>
 
     <script>
-        const DEFAULT_TMDB_KEY = "3fd2be6f0cd0516355027b003a27f5e8"; 
+        const DEFAULT_TMDB_KEY = "1d65c310bf3111d72ed327bdfe6c1993"; 
         let apiKey = localStorage.getItem('custom_tmdb_key') || DEFAULT_TMDB_KEY;
         const TMDB_BASE = "https://api.themoviedb.org/3";
         const IMAGE_BASE = "https://image.tmdb.org/t/p/w500";
@@ -604,7 +645,7 @@
                 backdrop_path: '/hZk239A82ChS3333.jpg',
                 vote_average: 8.4,
                 release_date: '1999-10-15',
-                overview: 'إنساني يعاني من الأرق وموظف في مكتب يلتقي بماركة صابون غامضة ويقيم معها نادياً قتالياً سرياً.'
+                overview: 'إنسان يعاني من الأرق وموظف في مكتب يلتقي بصانع صابون غامض ويقيم معه نادياً قتالياً سرياً.'
             },
             {
                 id: 157336,
@@ -741,7 +782,7 @@
                 const poster = item.poster_path ? `${IMAGE_BASE}${item.poster_path}` : 'https://placehold.co/300x450/1e293b/ffffff?text=لا+يوجد+بوستر';
 
                 const card = document.createElement('div');
-                card.className = "movie-card bg-slate-900 border border-slate-800/80 rounded-xl overflow-hidden shadow-lg group hover:border-brand-500/50 transition-all duration-300 flex flex-col justify-between cursor-pointer";
+                card.className = "movie-card bg-slate-900/80 backdrop-blur-sm border border-brand-500/20 rounded-xl overflow-hidden shadow-lg group hover:border-brand-500/70 transition-all duration-300 flex flex-col justify-between cursor-pointer";
                 
                 card.innerHTML = `
                     <div class="relative overflow-hidden aspect-[2/3] bg-slate-800">
@@ -768,7 +809,7 @@
                         <h3 class="font-bold text-xs sm:text-sm text-white truncate group-hover:text-brand-400 transition-colors">${title}</h3>
                         <div class="flex items-center justify-between text-[10px] sm:text-xs text-slate-400 mt-1">
                             <span>${year}</span>
-                            <span class="text-[10px] text-slate-500 uppercase">${type}</span>
+                            <span class="text-[10px] text-brand-300/70 uppercase">${type}</span>
                         </div>
                     </div>
                 `;
@@ -793,7 +834,7 @@
             watchHistory.forEach(item => {
                 const poster = item.poster_path ? `${IMAGE_BASE}${item.poster_path}` : 'https://placehold.co/150x225/1e293b/ffffff?text=Poster';
                 const div = document.createElement('div');
-                div.className = "shrink-0 w-28 sm:w-36 bg-slate-900 border border-slate-800 rounded-xl overflow-hidden cursor-pointer group hover:border-brand-500 transition-all";
+                div.className = "shrink-0 w-28 sm:w-36 bg-slate-900/80 backdrop-blur-sm border border-brand-500/20 rounded-xl overflow-hidden cursor-pointer group hover:border-brand-500 transition-all";
                 div.innerHTML = `
                     <div class="relative aspect-[2/3] bg-slate-800">
                         <img src="${poster}" class="w-full h-full object-cover">
@@ -818,9 +859,17 @@
                 const el = document.getElementById(`nav-${t}`);
                 if (el) {
                     if (t === tab) {
-                        el.className = "hover:text-brand-500 transition-colors py-1 text-white border-b-2 border-brand-500 font-bold";
+                        el.className = "hover:text-brand-400 transition-colors py-1 text-white border-b-2 border-brand-500 font-bold";
                     } else {
-                        el.className = "hover:text-brand-500 transition-colors py-1 text-slate-300";
+                        el.className = "hover:text-brand-400 transition-colors py-1 text-slate-300";
+                    }
+                }
+                const mobileEl = document.getElementById(`mobile-nav-${t}`);
+                if (mobileEl) {
+                    if (t === tab) {
+                        mobileEl.className = "flex flex-col items-center gap-1 text-brand-400 font-bold";
+                    } else {
+                        mobileEl.className = "flex flex-col items-center gap-1 text-slate-400";
                     }
                 }
             });
@@ -873,7 +922,7 @@
 
         async function filterByGenre(genreId, evt) {
             document.querySelectorAll('.genre-btn').forEach(btn => {
-                btn.className = "genre-btn bg-slate-800 hover:bg-slate-700 text-slate-300 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0";
+                btn.className = "genre-btn bg-slate-800/85 hover:bg-slate-700 text-slate-300 border border-brand-500/20 px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0";
             });
             if (evt && evt.target) {
                 evt.target.className = "genre-btn active-genre bg-brand-600 text-white font-medium px-3.5 sm:px-4 py-1.5 rounded-full whitespace-nowrap transition-colors shrink-0";
@@ -1207,12 +1256,12 @@
             genresContainer.innerHTML = '';
             if (item.genres) {
                 item.genres.forEach(g => {
-                    genresContainer.innerHTML += `<span class="bg-slate-800 text-slate-300 text-[10px] sm:text-[11px] px-2.5 py-0.5 rounded-full border border-slate-700">${g.name}</span>`;
+                    genresContainer.innerHTML += `<span class="bg-slate-800 text-slate-300 text-[10px] sm:text-[11px] px-2.5 py-0.5 rounded-full border border-brand-500/20">${g.name}</span>`;
                 });
             } else if (item.genre_ids) {
                 item.genre_ids.forEach(id => {
                     if (genresMap[id]) {
-                        genresContainer.innerHTML += `<span class="bg-slate-800 text-slate-300 text-[10px] sm:text-[11px] px-2.5 py-0.5 rounded-full border border-slate-700">${genresMap[id]}</span>`;
+                        genresContainer.innerHTML += `<span class="bg-slate-800 text-slate-300 text-[10px] sm:text-[11px] px-2.5 py-0.5 rounded-full border border-brand-500/20">${genresMap[id]}</span>`;
                     }
                 });
             }
@@ -1265,7 +1314,6 @@
         }
 
         function closeSettingsModal() {
-            document.getElementById('settingsModal').classList.hidden = true;
             document.getElementById('settingsModal').classList.add('hidden');
         }
 
@@ -1302,5 +1350,3 @@
     </script>
 </body>
 </html>
-
-```
