@@ -14,6 +14,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
@@ -58,9 +59,29 @@
         * {
             box-sizing: border-box;
         }
+        :root {
+            --bg-main: #fff7fa;
+            --text-main: #3b1d2a;
+            --text-muted: #8c5a6e;
+            --glass-header-bg: rgba(255, 247, 250, 0.82);
+            --glass-card-bg: rgba(255, 255, 255, 0.82);
+            --card-border: rgba(254, 205, 217, 0.9);
+            --video-overlay: linear-gradient(135deg, rgba(255, 245, 248, 0.78) 0%, rgba(255, 232, 240, 0.84) 50%, rgba(255, 219, 232, 0.88) 100%);
+        }
+        html.pink-dark {
+            --bg-main: #180b12;
+            --text-main: #ffe4ed;
+            --text-muted: #d8a2b8;
+            --glass-header-bg: rgba(28, 12, 20, 0.86);
+            --glass-card-bg: rgba(42, 18, 30, 0.82);
+            --card-border: rgba(244, 63, 110, 0.28);
+            --video-overlay: linear-gradient(135deg, rgba(24, 11, 18, 0.82) 0%, rgba(38, 14, 26, 0.86) 50%, rgba(24, 11, 18, 0.92) 100%);
+        }
+
         html, body {
-            background-color: #fff7fa;
-            color: #3b1d2a;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            transition: background-color 0.35s ease, color 0.35s ease;
         }
         body {
             font-family: 'Tajawal', sans-serif;
@@ -69,13 +90,47 @@
             accent-color: #f43f6e;
         }
 
-        /* Animated Soft Pink Background & Floating Orbs */
+        /* Top Loading Progress Bar */
+        #topProgressBar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 3px;
+            width: 0%;
+            background: linear-gradient(90deg, #fb7193, #f43f6e, #e11d52);
+            z-index: 100;
+            transition: width 0.3s ease, opacity 0.3s ease;
+            box-shadow: 0 0 10px rgba(244, 63, 110, 0.7);
+        }
+
+        /* Home Background Video Container */
+        #homeVideoBgWrapper {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            transition: opacity 0.4s ease;
+        }
+        #homeBgVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-pink-tint {
+            position: absolute;
+            inset: 0;
+            background: var(--video-overlay);
+            backdrop-filter: blur(2px);
+            transition: background 0.35s ease;
+        }
+
+        /* Animated Soft Pink Background & Floating Orbs (Used when video hidden or layered) */
         .pink-animated-bg {
             position: fixed;
             inset: 0;
             z-index: 0;
             pointer-events: none;
-            background: linear-gradient(135deg, #fff5f8 0%, #ffe8f0 45%, #ffdbe8 100%);
             overflow: hidden;
         }
 
@@ -83,7 +138,7 @@
             position: absolute;
             border-radius: 50%;
             filter: blur(55px);
-            opacity: 0.65;
+            opacity: 0.45;
             animation: floatOrb 16s infinite ease-in-out alternate;
         }
         .orb-1 {
@@ -92,7 +147,6 @@
             background: #ffb3cb;
             top: -80px;
             right: -60px;
-            animation-delay: 0s;
         }
         .orb-2 {
             width: 320px;
@@ -112,37 +166,23 @@
         }
 
         @keyframes floatOrb {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-            50% {
-                transform: translate(25px, -35px) scale(1.08);
-            }
-            100% {
-                transform: translate(-20px, 25px) scale(0.95);
-            }
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(25px, -35px) scale(1.08); }
+            100% { transform: translate(-20px, 25px) scale(0.95); }
         }
 
         /* Sparkle / Heart Particles */
         .particle {
             position: absolute;
-            background: rgba(244, 63, 110, 0.16);
+            background: rgba(244, 63, 110, 0.2);
             border-radius: 50%;
             animation: riseUp 12s infinite linear;
             bottom: -20px;
         }
         @keyframes riseUp {
-            0% {
-                transform: translateY(0) scale(0.8);
-                opacity: 0;
-            }
-            25% {
-                opacity: 0.7;
-            }
-            100% {
-                transform: translateY(-105vh) scale(1.2);
-                opacity: 0;
-            }
+            0% { transform: translateY(0) scale(0.8); opacity: 0; }
+            25% { opacity: 0.7; }
+            100% { transform: translateY(-105vh) scale(1.2); opacity: 0; }
         }
 
         /* Custom Scrollbar */
@@ -151,7 +191,7 @@
             height: 7px;
         }
         ::-webkit-scrollbar-track {
-            background: #ffeef4;
+            background: transparent;
         }
         ::-webkit-scrollbar-thumb {
             background: #fda4ba;
@@ -168,16 +208,36 @@
             scrollbar-width: none;
         }
 
-        /* Glassmorphism Light Pink */
+        /* Adaptive Glassmorphism */
         .glass-header {
-            background: rgba(255, 247, 250, 0.85);
+            background: var(--glass-header-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
         }
         .glass-card {
-            background: rgba(255, 255, 255, 0.82);
+            background: var(--glass-card-bg);
+            border-color: var(--card-border);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Dark Mode Text Overrides */
+        html.pink-dark .text-pastel-text { color: #ffe4ed !important; }
+        html.pink-dark .text-pastel-muted { color: #d8a2b8 !important; }
+        html.pink-dark .bg-white,
+        html.pink-dark .bg-white\/90,
+        html.pink-dark .bg-white\/85,
+        html.pink-dark .bg-white\/95 {
+            background-color: rgba(46, 20, 33, 0.9) !important;
+            color: #ffe4ed !important;
+        }
+        html.pink-dark .bg-brand-50,
+        html.pink-dark .bg-brand-50\/80 {
+            background-color: rgba(65, 24, 44, 0.85) !important;
+        }
+        html.pink-dark .border-brand-200,
+        html.pink-dark .border-brand-100 {
+            border-color: rgba(244, 63, 110, 0.3) !important;
         }
 
         /* Movie Card Animations */
@@ -186,42 +246,75 @@
         }
         .movie-card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 18px 35px -10px rgba(244, 63, 110, 0.25);
+            box-shadow: 0 18px 35px -10px rgba(244, 63, 110, 0.28);
         }
         .movie-card:hover .card-overlay {
             opacity: 1;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px) scale(0.98);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(10px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         .animate-fade-in {
             animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            45% { transform: scale(1.35); }
+            100% { transform: scale(1); }
+        }
+        .heart-pop {
+            animation: heartPop 0.35s ease;
+        }
+
         @keyframes pulseGlow {
-            0%, 100% {
-                box-shadow: 0 0 0 0 rgba(244, 63, 110, 0.35);
-            }
-            50% {
-                box-shadow: 0 0 0 10px rgba(244, 63, 110, 0);
-            }
+            0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 110, 0.35); }
+            50% { box-shadow: 0 0 0 10px rgba(244, 63, 110, 0); }
         }
         .btn-glow {
             animation: pulseGlow 2.5s infinite;
+        }
+
+        /* Cinema Lights Off Mode */
+        #cinemaBackdropOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 4, 8, 0.94);
+            z-index: 35;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        body.cinema-lights-off #cinemaBackdropOverlay {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        body.cinema-lights-off #playerCinemaWrapper {
+            position: relative;
+            z-index: 45;
         }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between relative selection:bg-brand-200 selection:text-brand-900">
 
-    <!-- Animated Soft Pink Background -->
+    <!-- Top Animated Progress Bar -->
+    <div id="topProgressBar"></div>
+
+    <!-- Cinema Mode Dimmer -->
+    <div id="cinemaBackdropOverlay" onclick="toggleCinemaLights(false)"></div>
+
+    <!-- Home Page Background Video (Hidden automatically on /view) -->
+    <div id="homeVideoBgWrapper" aria-hidden="true">
+        <video id="homeBgVideo" autoplay loop muted playsinline preload="auto">
+            <source src="https://www.image2url.com/r2/default/videos/1795117559430-b41f9619-7a8f-49a7-a338-2d0e8ca4e508.mov" type="video/mp4">
+            <source src="https://www.image2url.com/r2/default/videos/1795117559430-b41f9619-7a8f-49a7-a338-2d0e8ca4e508.mov" type="video/quicktime">
+        </video>
+        <div class="video-pink-tint"></div>
+    </div>
+
+    <!-- Animated Soft Pink Floating Orbs & Particles -->
     <div class="pink-animated-bg" aria-hidden="true" id="particlesContainer">
         <div class="floating-orb orb-1"></div>
         <div class="floating-orb orb-2"></div>
@@ -229,7 +322,7 @@
     </div>
 
     <!-- Toast Notification Container -->
-    <div id="toastContainer" class="fixed bottom-5 left-5 z-[60] flex flex-col gap-2 pointer-events-none"></div>
+    <div id="toastContainer" class="fixed bottom-5 left-5 z-[70] flex flex-col gap-2 pointer-events-none"></div>
 
     <!-- ========================================================= -->
     <!-- MAIN CATALOG VIEW (Home, Movies, TV, Watchlist, History)  -->
@@ -238,16 +331,16 @@
 
         <!-- Header / Navbar -->
         <header class="fixed top-0 left-0 right-0 z-40 glass-header border-b border-brand-200/80 shadow-sm shadow-brand-500/5 transition-all duration-300">
-            <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
+            <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-3">
                 
                 <!-- Logo & Navigation -->
-                <div class="flex items-center gap-4 lg:gap-8 min-w-0">
-                    <a href="/" onclick="event.preventDefault(); navigateToHome(); switchTab('home');" class="flex items-center gap-2.5 text-lg sm:text-2xl font-black text-brand-600 tracking-wider shrink-0 group">
-                        <img src="https://i.ibb.co/1kJpTCk/IMG-7958.jpg" alt="Logo" class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl object-cover border-2 border-brand-300 shadow-md shadow-brand-500/20 group-hover:rotate-6 transition-transform">
+                <div class="flex items-center gap-3 lg:gap-6 min-w-0">
+                    <a href="/" onclick="event.preventDefault(); exitWatchPage(); switchTab('home');" class="flex items-center gap-2 text-base sm:text-2xl font-black text-brand-600 tracking-wider shrink-0 group">
+                        <img src="https://i.ibb.co/1kJpTCk/IMG-7958.jpg" alt="Logo" class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl object-cover border-2 border-brand-300 shadow-md shadow-brand-500/20 group-hover:rotate-6 transition-transform">
                         <span>سلاكس<span class="text-pastel-text"> سينما</span></span>
                     </a>
 
-                    <nav class="hidden md:flex items-center gap-4 lg:gap-6 font-bold text-pastel-muted text-sm lg:text-base">
+                    <nav class="hidden lg:flex items-center gap-5 font-bold text-pastel-muted text-sm">
                         <button onclick="switchTab('home')" id="nav-home" class="hover:text-brand-600 transition-colors py-1 text-brand-600 border-b-2 border-brand-500 font-extrabold">الرئيسية</button>
                         <button onclick="switchTab('movies')" id="nav-movies" class="hover:text-brand-600 transition-colors py-1">الأفلام</button>
                         <button onclick="switchTab('tv')" id="nav-tv" class="hover:text-brand-600 transition-colors py-1">المسلسلات</button>
@@ -260,20 +353,37 @@
                     </nav>
                 </div>
 
-                <!-- Search Bar & Settings -->
-                <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-                    <div class="relative w-36 sm:w-52 md:w-64 lg:w-72">
-                        <input type="text" id="searchInput" placeholder="ابحث عن فيلم أو مسلسل..." 
-                            class="w-full bg-white/90 text-xs sm:text-sm text-pastel-text placeholder-brand-400 rounded-full py-2 pr-8 sm:pr-10 pl-3 border border-brand-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200 transition-all shadow-sm"
+                <!-- Search Bar, Random Pick, Profile & Theme Controls -->
+                <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+                    <div class="relative w-28 sm:w-44 md:w-56">
+                        <input type="text" id="searchInput" placeholder="ابحث..." 
+                            class="w-full bg-white/90 text-xs sm:text-sm text-pastel-text placeholder-brand-400 rounded-full py-1.5 sm:py-2 pr-8 sm:pr-9 pl-3 border border-brand-200 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200 transition-all shadow-sm"
                             onkeyup="handleSearch(event)">
-                        <i class="fa-solid fa-magnifying-glass absolute right-2.5 sm:right-3.5 top-2.5 sm:top-3 text-brand-500 text-xs sm:text-sm"></i>
+                        <i class="fa-solid fa-magnifying-glass absolute right-2.5 sm:right-3 top-2 sm:top-2.5 text-brand-500 text-xs"></i>
                     </div>
 
-                    <button onclick="openAdGuideModal()" class="bg-white/90 hover:bg-brand-50 text-amber-500 p-2 sm:p-2.5 rounded-full border border-brand-200 shadow-sm transition-all hover:scale-105 shrink-0" title="نصائح حجب الإعلانات">
+                    <!-- Random Pick Dice Button -->
+                    <button onclick="pickRandomShow()" class="bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 text-white px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-full text-xs font-extrabold shadow-sm shadow-brand-500/25 flex items-center gap-1.5 transition-all hover:scale-105 shrink-0" title="اختر لي عشوائياً">
+                        <i class="fa-solid fa-dice text-sm"></i>
+                        <span class="hidden sm:inline">مفاجأة</span>
+                    </button>
+
+                    <!-- Profile Badge -->
+                    <button onclick="openProfileModal()" id="profileBadgeBtn" class="hidden sm:flex items-center gap-1.5 bg-white/90 hover:bg-brand-50 text-pastel-text px-3 py-1.5 rounded-full border border-brand-200 text-xs font-bold shadow-sm transition-all" title="تخصيص الاسم">
+                        <i class="fa-solid fa-user-astronaut text-brand-500"></i>
+                        <span id="headerUserName">زائر سلاكس</span>
+                    </button>
+
+                    <!-- Pink Light / Dark Toggle -->
+                    <button onclick="togglePinkTheme()" id="themeToggleBtn" class="bg-white/90 hover:bg-brand-50 text-brand-600 p-2 rounded-full border border-brand-200 shadow-sm transition-all hover:scale-105 shrink-0" title="تبديل الوضع الليلي الوردي">
+                        <i class="fa-solid fa-moon text-xs sm:text-sm" id="themeIcon"></i>
+                    </button>
+
+                    <button onclick="openAdGuideModal()" class="bg-white/90 hover:bg-brand-50 text-amber-500 p-2 rounded-full border border-brand-200 shadow-sm transition-all hover:scale-105 shrink-0" title="نصائح حجب الإعلانات">
                         <i class="fa-solid fa-shield-halved text-xs sm:text-sm"></i>
                     </button>
 
-                    <button onclick="openSettingsModal()" class="bg-white/90 hover:bg-brand-50 text-brand-600 p-2 sm:p-2.5 rounded-full border border-brand-200 shadow-sm transition-all hover:scale-105 shrink-0" title="إعدادات الـ API">
+                    <button onclick="openSettingsModal()" class="bg-white/90 hover:bg-brand-50 text-brand-600 p-2 rounded-full border border-brand-200 shadow-sm transition-all hover:scale-105 shrink-0" title="إعدادات الـ API">
                         <i class="fa-solid fa-gear text-xs sm:text-sm"></i>
                     </button>
                 </div>
@@ -281,7 +391,7 @@
             </div>
 
             <!-- Mobile Nav bar bottom -->
-            <div class="md:hidden flex justify-around bg-white/95 border-t border-brand-100 py-2 text-[11px] sm:text-xs text-pastel-muted">
+            <div class="lg:hidden flex justify-around bg-white/95 border-t border-brand-100 py-2 text-[11px] sm:text-xs text-pastel-muted">
                 <button onclick="switchTab('home')" id="mobile-nav-home" class="flex flex-col items-center gap-1 text-brand-600 font-bold">
                     <i class="fa-solid fa-house text-sm"></i> الرئيسية
                 </button>
@@ -294,8 +404,8 @@
                 <button onclick="switchTab('watchlist')" id="mobile-nav-watchlist" class="flex flex-col items-center gap-1">
                     <i class="fa-solid fa-heart text-sm"></i> المفضلة
                 </button>
-                <button onclick="switchTab('history')" id="mobile-nav-history" class="flex flex-col items-center gap-1">
-                    <i class="fa-solid fa-clock-rotate-left text-sm"></i> السجل
+                <button onclick="openProfileModal()" class="flex flex-col items-center gap-1">
+                    <i class="fa-solid fa-user text-sm"></i> حسابي
                 </button>
             </div>
         </header>
@@ -304,15 +414,15 @@
 
             <!-- Hero Section Banner -->
             <div id="heroBanner" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-2 hidden">
-                <div class="relative w-full h-[46vh] sm:h-[54vh] min-h-[340px] max-h-[520px] rounded-3xl overflow-hidden shadow-xl shadow-brand-500/15 border border-white/80">
+                <div class="relative w-full h-[46vh] sm:h-[54vh] min-h-[340px] max-h-[520px] rounded-3xl overflow-hidden shadow-xl shadow-brand-500/15 border border-brand-200/80">
                     <div id="heroBackdrop" class="absolute inset-0 bg-cover bg-center transition-all duration-700 scale-105"></div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-[#fff7fa] via-[#fff7fa]/65 to-transparent"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#fff7fa] via-[#fff7fa]/60 to-transparent dark:from-[#180b12]"></div>
                     <div class="absolute inset-0 bg-gradient-to-l from-[#fff7fa]/95 via-[#fff7fa]/70 to-transparent"></div>
                     
                     <div class="relative h-full px-5 sm:px-10 flex items-end pb-7 sm:pb-10">
                         <div class="max-w-2xl space-y-2.5 sm:space-y-4">
                             <div class="flex items-center gap-1.5 text-[11px] sm:text-xs font-extrabold text-brand-600 bg-white/90 px-3 py-1 rounded-full w-fit border border-brand-200 shadow-sm">
-                                <i class="fa-solid fa-sparkles text-brand-500"></i> الأبرز اليوم على سلاكس سينما
+                                <i class="fa-solid fa-sparkles text-brand-500"></i> <span id="heroGreetingTag">الأبرز اليوم على سلاكس سينما</span>
                             </div>
                             <h1 id="heroTitle" class="text-xl sm:text-3xl md:text-5xl font-black text-pastel-text leading-tight truncate max-w-full">...</h1>
                             <div class="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm font-bold">
@@ -350,8 +460,41 @@
                 </div>
             </div>
 
+            <!-- Curated Home Horizontal Rows (Shown on Home Tab) -->
+            <div id="curatedRowsContainer" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-6 space-y-7">
+                <!-- Row 1: Romance & Drama -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-base sm:text-lg font-black text-pastel-text flex items-center gap-2">
+                            <span class="w-1.5 h-5 bg-brand-500 rounded-full"></span> 💖 مختارات رومانسية ودرامية
+                        </h3>
+                    </div>
+                    <div id="rowRomanceGrid" class="flex gap-3.5 overflow-x-auto pb-3 hide-scrollbar"></div>
+                </div>
+
+                <!-- Row 2: Top Rated -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-base sm:text-lg font-black text-pastel-text flex items-center gap-2">
+                            <span class="w-1.5 h-5 bg-amber-400 rounded-full"></span> ⭐ الأعلى تقييماً في السينما
+                        </h3>
+                    </div>
+                    <div id="rowTopRatedGrid" class="flex gap-3.5 overflow-x-auto pb-3 hide-scrollbar"></div>
+                </div>
+
+                <!-- Row 3: Animation & Anime -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h3 class="text-base sm:text-lg font-black text-pastel-text flex items-center gap-2">
+                            <span class="w-1.5 h-5 bg-pink-400 rounded-full"></span> 🌸 عالم الأنمي والأنيميشن
+                        </h3>
+                    </div>
+                    <div id="rowAnimeGrid" class="flex gap-3.5 overflow-x-auto pb-3 hide-scrollbar"></div>
+                </div>
+            </div>
+
             <!-- Section Categories / Filters -->
-            <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-5 sm:mt-7">
+            <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-6 sm:mt-8">
                 <div class="flex items-center justify-between gap-2 overflow-x-auto pb-2 hide-scrollbar text-xs sm:text-sm max-w-full">
                     <div class="flex items-center gap-2 overflow-x-auto hide-scrollbar" id="genreFilters">
                         <button onclick="filterByGenre('all', event)" class="genre-btn active-genre bg-brand-500 text-white font-bold px-4 py-1.5 rounded-full whitespace-nowrap shadow-sm shadow-brand-500/25 transition-all shrink-0">الكل</button>
@@ -377,7 +520,7 @@
                 <div class="flex items-center justify-between">
                     <h2 id="sectionTitle" class="text-lg sm:text-2xl font-black text-pastel-text flex items-center gap-2.5">
                         <span class="w-2 h-6 bg-gradient-to-b from-brand-400 to-brand-600 rounded-full inline-block"></span>
-                        الأفلام والمسلسلات الشائعة
+                        الأكثر رواجاً اليوم
                     </h2>
                     <span id="resultCount" class="text-xs sm:text-sm font-bold text-brand-600 bg-brand-100 px-3 py-1 rounded-full"></span>
                 </div>
@@ -393,11 +536,18 @@
                     <!-- Dynamic cards -->
                 </div>
 
+                <!-- Load More Button -->
+                <div id="loadMoreContainer" class="hidden flex justify-center pt-4">
+                    <button onclick="loadMoreItems()" id="loadMoreBtn" class="bg-white hover:bg-brand-50 text-brand-600 border-2 border-brand-300 font-extrabold px-8 py-3 rounded-2xl text-xs sm:text-sm shadow-md shadow-brand-500/10 flex items-center gap-2 transition-all hover:scale-105">
+                        <i class="fa-solid fa-plus"></i> عرض المزيد من الأعمال
+                    </button>
+                </div>
+
                 <!-- Empty State -->
                 <div id="emptyState" class="hidden flex-col items-center justify-center py-16 text-center space-y-3 glass-card rounded-3xl border border-brand-200 shadow-sm">
                     <i class="fa-solid fa-film text-5xl sm:text-6xl text-brand-300"></i>
                     <p class="text-pastel-text font-bold text-sm sm:text-lg">لم يتم العثور على نتائج تطابق بحثك</p>
-                    <button onclick="loadTrending()" class="bg-brand-500 hover:bg-brand-600 text-white font-bold px-5 py-2.5 rounded-xl text-xs sm:text-sm shadow-md shadow-brand-500/25 transition-all">العودة للرئيسية</button>
+                    <button onclick="switchTab('home')" class="bg-brand-500 hover:bg-brand-600 text-white font-bold px-5 py-2.5 rounded-xl text-xs sm:text-sm shadow-md shadow-brand-500/25 transition-all">العودة للرئيسية</button>
                 </div>
 
             </div>
@@ -423,9 +573,9 @@
         
         <!-- Watch Page Top Navbar -->
         <header class="glass-header border-b border-brand-200 sticky top-0 z-30 shadow-sm">
-            <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3 min-w-0">
-                    <button onclick="exitWatchPage()" class="bg-white hover:bg-brand-100 text-brand-600 border border-brand-200 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold flex items-center gap-1.5 shadow-sm transition-all hover:scale-105 shrink-0">
+            <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-2 sm:gap-3">
+                <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+                    <button onclick="exitWatchPage()" class="bg-white hover:bg-brand-100 text-brand-600 border border-brand-200 px-3 sm:px-3.5 py-2 rounded-xl text-xs sm:text-sm font-extrabold flex items-center gap-1.5 shadow-sm transition-all hover:scale-105 shrink-0">
                         <i class="fa-solid fa-arrow-right"></i> الرئيسية
                     </button>
                     <div class="h-5 w-[1px] bg-brand-200 hidden sm:block"></div>
@@ -433,12 +583,20 @@
                     <h1 id="viewTitle" class="text-sm sm:text-lg font-black text-pastel-text truncate">اسم العمل</h1>
                 </div>
 
-                <div class="flex items-center gap-2 shrink-0">
-                    <button onclick="openAdGuideModal()" class="bg-white hover:bg-amber-50 text-amber-600 border border-amber-200 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all">
-                        <i class="fa-solid fa-shield-halved"></i>
-                        <span class="hidden sm:inline">منع الإعلانات</span>
+                <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                    <!-- Random Pick in Watch Page -->
+                    <button onclick="pickRandomShow()" class="bg-white hover:bg-brand-50 text-brand-600 border border-brand-200 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all" title="عمل عشوائي آخر">
+                        <i class="fa-solid fa-dice"></i>
+                        <span class="hidden md:inline">عشوائي</span>
                     </button>
-                    <a id="externalPlayerLink" href="#" target="_blank" class="bg-brand-500 hover:bg-brand-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all">
+
+                    <!-- Cinema Mode Lights Off Button -->
+                    <button onclick="toggleCinemaLights()" id="cinemaLightsBtn" class="bg-white hover:bg-brand-50 text-pastel-text border border-brand-200 px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all">
+                        <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                        <span class="hidden sm:inline">وضع السينما</span>
+                    </button>
+
+                    <a id="externalPlayerLink" href="#" target="_blank" class="bg-brand-500 hover:bg-brand-600 text-white px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all">
                         <i class="fa-solid fa-arrow-up-right-from-square"></i>
                         <span class="hidden sm:inline">نافذة خارجية</span>
                     </a>
@@ -494,13 +652,28 @@
                 </div>
             </div>
 
-            <!-- Video Player Frame -->
-            <div class="relative w-full aspect-video bg-slate-950 rounded-3xl overflow-hidden shadow-2xl shadow-brand-500/20 border-4 border-white">
-                <iframe id="videoIframe" class="w-full h-full border-0" 
-                    referrerpolicy="no-referrer"
-                    allowfullscreen 
-                    allow="autoplay; encrypted-media; fullscreen; picture-in-picture">
-                </iframe>
+            <!-- Video Player Frame (Wrapped for Cinema Mode) -->
+            <div id="playerCinemaWrapper" class="space-y-3">
+                <div class="relative w-full aspect-video bg-slate-950 rounded-3xl overflow-hidden shadow-2xl shadow-brand-500/20 border-4 border-white">
+                    <iframe id="videoIframe" class="w-full h-full border-0" 
+                        referrerpolicy="no-referrer"
+                        allowfullscreen 
+                        allow="autoplay; encrypted-media; fullscreen; picture-in-picture">
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Interactive Episode Buttons Grid (Shown for TV Shows) -->
+            <div id="episodeGridCard" class="hidden glass-card border border-brand-200 rounded-3xl p-4 sm:p-5 shadow-sm space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm sm:text-base font-black text-pastel-text flex items-center gap-2">
+                        <i class="fa-solid fa-list-ol text-brand-500"></i> حلقات الموسم
+                    </h3>
+                    <span id="episodeGridCount" class="text-xs font-bold text-brand-600 bg-brand-100 px-2.5 py-0.5 rounded-full"></span>
+                </div>
+                <div id="episodeButtonsGrid" class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 lg:grid-cols-12 gap-2 max-h-48 overflow-y-auto p-1">
+                    <!-- Episode buttons injected via JS -->
+                </div>
             </div>
 
             <!-- Work Details Card Below Player -->
@@ -524,6 +697,16 @@
                 </div>
             </div>
 
+            <!-- Similar Recommendations Section in Watch Page -->
+            <div id="similarSection" class="hidden space-y-3 pt-2">
+                <h3 class="text-base sm:text-lg font-black text-pastel-text flex items-center gap-2">
+                    <span class="w-1.5 h-5 bg-brand-500 rounded-full"></span> ✨ أعمال مشابهة قد تعجبك
+                </h3>
+                <div id="similarGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3.5">
+                    <!-- Similar items injected via JS -->
+                </div>
+            </div>
+
         </div>
 
         <!-- Watch Page Footer -->
@@ -535,6 +718,33 @@
     <!-- ========================================================= -->
     <!-- MODALS (Welcome, Filter, Ad Guide, Trailer, Details, API) -->
     <!-- ========================================================= -->
+
+    <!-- Profile Name Customization Modal -->
+    <div id="profileModal" class="fixed inset-0 z-50 bg-brand-900/30 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white border-2 border-brand-200 rounded-3xl w-full max-w-sm p-5 sm:p-6 space-y-4 shadow-xl animate-fade-in">
+            <div class="flex items-center justify-between border-b border-brand-100 pb-3">
+                <h3 class="text-base font-black text-pastel-text flex items-center gap-2">
+                    <i class="fa-solid fa-user-astronaut text-brand-500"></i> تخصيص ملفك الشخصي
+                </h3>
+                <button onclick="closeProfileModal()" class="text-pastel-muted hover:text-brand-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-2">
+                <label class="text-xs font-bold text-pastel-text">اسمك أو لقبك المفضل:</label>
+                <input type="text" id="profileNameInput" placeholder="مثال: سارة، مهند..." maxlength="20"
+                    class="w-full bg-brand-50 text-xs sm:text-sm text-pastel-text px-3.5 py-2.5 rounded-xl border border-brand-200 focus:outline-none focus:border-brand-500">
+            </div>
+            <div class="flex gap-2">
+                <button onclick="saveProfileName()" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-bold py-2.5 rounded-xl text-xs sm:text-sm transition-colors">
+                    حفظ الاسم
+                </button>
+                <button onclick="closeProfileModal()" class="w-full bg-brand-50 hover:bg-brand-100 text-brand-700 font-bold py-2.5 rounded-xl text-xs sm:text-sm transition-colors">
+                    إلغاء
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Entry Welcome / Ad-Blocker Notice Modal -->
     <div id="welcomeNoticeModal" class="fixed inset-0 z-50 bg-brand-900/30 backdrop-blur-md hidden flex items-center justify-center p-4">
@@ -774,6 +984,10 @@
 
         let currentTab = 'home';
         let currentItems = [];
+        let currentPage = 1;
+        let currentEndpoint = '/trending/all/day';
+        let currentParams = {};
+
         let watchlist = JSON.parse(localStorage.getItem('user_watchlist') || '[]');
         let watchHistory = JSON.parse(localStorage.getItem('user_history') || '[]');
         let currentItemDetails = null;
@@ -785,6 +999,7 @@
         let activePosterPath = '';
         let activeViewItemData = null;
         let tvSeasonsData = [];
+        let isCinemaLightsOff = false;
 
         const genresMap = {
             28: 'أكشن', 12: 'مغامرة', 16: 'أنيميشن', 35: 'كوميديا',
@@ -828,6 +1043,89 @@
             }
         ];
 
+        // =========================================================
+        // TOP PROGRESS BAR & THEME / PROFILE INITIALIZATION
+        // =========================================================
+        function startTopProgress() {
+            const bar = document.getElementById('topProgressBar');
+            if (!bar) return;
+            bar.style.opacity = '1';
+            bar.style.width = '40%';
+            setTimeout(() => { if (bar.style.width === '40%') bar.style.width = '75%'; }, 250);
+        }
+
+        function finishTopProgress() {
+            const bar = document.getElementById('topProgressBar');
+            if (!bar) return;
+            bar.style.width = '100%';
+            setTimeout(() => {
+                bar.style.opacity = '0';
+                setTimeout(() => { bar.style.width = '0%'; }, 250);
+            }, 300);
+        }
+
+        function initThemeAndProfile() {
+            // Theme
+            const savedTheme = localStorage.getItem('slax_pink_theme');
+            if (savedTheme === 'dark') {
+                document.documentElement.classList.add('pink-dark');
+                document.getElementById('themeIcon').className = 'fa-solid fa-sun text-amber-400 text-xs sm:text-sm';
+            }
+
+            // Profile Name
+            const savedName = localStorage.getItem('slax_user_name');
+            updateProfileUI(savedName);
+        }
+
+        function togglePinkTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('themeIcon');
+            if (html.classList.contains('pink-dark')) {
+                html.classList.remove('pink-dark');
+                localStorage.setItem('slax_pink_theme', 'light');
+                icon.className = 'fa-solid fa-moon text-xs sm:text-sm';
+                showToast('تم تفعيل الوضع الوردي الصباحي 🌸');
+            } else {
+                html.classList.add('pink-dark');
+                localStorage.setItem('slax_pink_theme', 'dark');
+                icon.className = 'fa-solid fa-sun text-amber-400 text-xs sm:text-sm';
+                showToast('تم تفعيل الوضع الوردي الليلي 🌙');
+            }
+        }
+
+        function openProfileModal() {
+            document.getElementById('profileNameInput').value = localStorage.getItem('slax_user_name') || '';
+            document.getElementById('profileModal').classList.remove('hidden');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profileModal').classList.add('hidden');
+        }
+
+        function saveProfileName() {
+            const val = document.getElementById('profileNameInput').value.trim();
+            if (val) {
+                localStorage.setItem('slax_user_name', val);
+            } else {
+                localStorage.removeItem('slax_user_name');
+            }
+            updateProfileUI(val);
+            closeProfileModal();
+            showToast(val ? `أهلاً بك يا ${val} 💖` : 'تمت إعادة تعيين الاسم');
+        }
+
+        function updateProfileUI(name) {
+            const headerName = document.getElementById('headerUserName');
+            const greetingTag = document.getElementById('heroGreetingTag');
+            if (name) {
+                if (headerName) headerName.textContent = name;
+                if (greetingTag) greetingTag.textContent = `أهلاً ${name} ✨ الأبرز اليوم على سلاكس سينما`;
+            } else {
+                if (headerName) headerName.textContent = 'زائر سلاكس';
+                if (greetingTag) greetingTag.textContent = 'الأبرز اليوم على سلاكس سينما';
+            }
+        }
+
         // Generate soft floating particles on background
         function createFloatingParticles() {
             const container = document.getElementById('particlesContainer');
@@ -845,7 +1143,6 @@
             }
         }
 
-        // Toast notification helper (Replaces alert)
         function showToast(message) {
             const container = document.getElementById('toastContainer');
             const toast = document.createElement('div');
@@ -861,10 +1158,28 @@
         }
 
         window.onload = function() {
+            initThemeAndProfile();
             createFloatingParticles();
             handleInitialRoute();
             window.addEventListener('popstate', handleInitialRoute);
         };
+
+        // =========================================================
+        // CONTROL HOME BACKGROUND VIDEO VISIBILITY
+        // =========================================================
+        function setHomeVideoActive(isActive) {
+            const wrapper = document.getElementById('homeVideoBgWrapper');
+            const video = document.getElementById('homeBgVideo');
+            if (!wrapper || !video) return;
+
+            if (isActive) {
+                wrapper.classList.remove('hidden');
+                video.play().catch(() => {});
+            } else {
+                video.pause();
+                wrapper.classList.add('hidden');
+            }
+        }
 
         // =========================================================
         // VERCEL CLEAN URL ROUTING (/view) & ISOLATED WATCH PAGE
@@ -887,13 +1202,13 @@
                 }
             }
 
-            // Otherwise show Main Catalog
             showCatalogView();
             initApp();
             checkWelcomeNotice();
         }
 
         function navigateToWatchPage(tmdbId, mediaType = 'movie', title = '', poster = '', season = 1, episode = 1) {
+            startTopProgress();
             const url = new URL(window.location.origin + '/view');
             url.searchParams.set('id', tmdbId);
             url.searchParams.set('type', mediaType);
@@ -914,6 +1229,7 @@
         }
 
         function exitWatchPage() {
+            toggleCinemaLights(false);
             const iframe = document.getElementById('videoIframe');
             if (iframe) iframe.src = '';
 
@@ -932,6 +1248,8 @@
         }
 
         function showCatalogView() {
+            toggleCinemaLights(false);
+            setHomeVideoActive(true);
             document.getElementById('isolatedWatchView').classList.add('hidden');
             document.getElementById('isolatedWatchView').classList.remove('flex');
             document.getElementById('mainCatalogView').classList.remove('hidden');
@@ -939,6 +1257,10 @@
         }
 
         async function renderIsolatedWatchPage(tmdbId, mediaType, title, poster, season, episode, shouldScroll = true) {
+            startTopProgress();
+            // Hide and pause background video in watch page
+            setHomeVideoActive(false);
+
             activeTmdbId = tmdbId;
             activeMediaType = mediaType;
             activePosterPath = poster;
@@ -954,13 +1276,15 @@
             document.getElementById('viewCardTitle').textContent = title || 'جاري التحميل...';
 
             const tvContainer = document.getElementById('tvSelectorContainer');
+            const epGridCard = document.getElementById('episodeGridCard');
             if (mediaType === 'tv') {
                 tvContainer.classList.remove('hidden');
+                epGridCard.classList.remove('hidden');
             } else {
                 tvContainer.classList.add('hidden');
+                epGridCard.classList.add('hidden');
             }
 
-            // Fetch real TMDB details for accurate seasons/episodes & metadata
             const details = await fetchTMDB(`/${mediaType}/${tmdbId}`);
             if (details) {
                 activeViewItemData = { ...details, media_type: mediaType };
@@ -987,7 +1311,6 @@
                     episode: episode
                 });
             } else {
-                // Fallback if offline or API limited
                 document.getElementById('viewPoster').src = poster ? `${IMAGE_BASE}${poster}` : 'https://placehold.co/300x450/ffe4ed/be1241?text=Slax+Cinema';
                 if (mediaType === 'tv') {
                     setupFallbackTvDropdowns(season, episode);
@@ -1004,10 +1327,90 @@
 
             updateViewFavButtonUI();
             updateIframeSrc();
+            loadSimilarRecommendations(tmdbId, mediaType);
+            finishTopProgress();
         }
 
+        // Cinema Lights Off Mode Toggle
+        function toggleCinemaLights(forceState = null) {
+            isCinemaLightsOff = forceState !== null ? forceState : !isCinemaLightsOff;
+            const btn = document.getElementById('cinemaLightsBtn');
+            if (isCinemaLightsOff) {
+                document.body.classList.add('cinema-lights-off');
+                if (btn) btn.innerHTML = `<i class="fa-solid fa-sun text-amber-400"></i> <span class="hidden sm:inline">إضاءة الغرفة</span>`;
+            } else {
+                document.body.classList.remove('cinema-lights-off');
+                if (btn) btn.innerHTML = `<i class="fa-solid fa-lightbulb text-amber-500"></i> <span class="hidden sm:inline">وضع السينما</span>`;
+            }
+        }
+
+        // Random Pick Feature
+        async function pickRandomShow() {
+            startTopProgress();
+            showToast('جاري اختيار عمل عشوائي مميز لك 🎲...');
+            const randomPage = Math.floor(Math.random() * 5) + 1;
+            const randomType = Math.random() > 0.4 ? 'movie' : 'tv';
+            const data = await fetchTMDB(`/discover/${randomType}`, {
+                sort_by: 'popularity.desc',
+                'vote_average.gte': '7.0',
+                page: randomPage
+            });
+
+            if (data && data.results && data.results.length > 0) {
+                const valid = data.results.filter(i => i.poster_path);
+                const pick = valid[Math.floor(Math.random() * valid.length)] || data.results[0];
+                const title = pick.title || pick.name;
+                navigateToWatchPage(pick.id, randomType, title, pick.poster_path || '', 1, 1);
+            } else {
+                const fallbackPick = fallbackCatalog[Math.floor(Math.random() * fallbackCatalog.length)];
+                navigateToWatchPage(fallbackPick.id, fallbackPick.media_type, fallbackPick.title, fallbackPick.poster_path, 1, 1);
+            }
+            finishTopProgress();
+        }
+
+        // Similar Recommendations in Watch Page
+        async function loadSimilarRecommendations(tmdbId, mediaType) {
+            const section = document.getElementById('similarSection');
+            const grid = document.getElementById('similarGrid');
+            if (!section || !grid) return;
+
+            const data = await fetchTMDB(`/${mediaType}/${tmdbId}/recommendations`);
+            const items = (data && data.results && data.results.length > 0) ? data.results.slice(0, 5) : [];
+
+            if (items.length === 0) {
+                section.classList.add('hidden');
+                return;
+            }
+
+            section.classList.remove('hidden');
+            grid.innerHTML = '';
+
+            items.forEach(item => {
+                const title = item.title || item.name;
+                const type = item.media_type || mediaType;
+                const rating = item.vote_average ? item.vote_average.toFixed(1) : '8.0';
+                const poster = item.poster_path ? `${IMAGE_BASE}${item.poster_path}` : 'https://placehold.co/300x450/ffe4ed/be1241?text=Poster';
+
+                const card = document.createElement('div');
+                card.className = "movie-card glass-card border border-brand-200 rounded-2xl overflow-hidden shadow-sm cursor-pointer group";
+                card.innerHTML = `
+                    <div class="relative aspect-[2/3] bg-brand-100 overflow-hidden">
+                        <img src="${poster}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        <div class="absolute top-2 right-2 bg-white/90 px-2 py-0.5 rounded-full text-amber-600 text-[10px] font-extrabold">
+                            ⭐ ${rating}
+                        </div>
+                    </div>
+                    <div class="p-2.5">
+                        <h4 class="font-extrabold text-xs text-pastel-text truncate group-hover:text-brand-600">${title}</h4>
+                    </div>
+                `;
+                card.onclick = () => navigateToWatchPage(item.id, type, title, item.poster_path || '', 1, 1);
+                grid.appendChild(card);
+            });
+        }
+
+        // TV Seasons & Interactive Episode Buttons Grid
         function setupRealTvDropdowns(seasons, defaultSeason = 1, defaultEpisode = 1) {
-            // Filter out Season 0 (Specials) unless it's the only season
             const validSeasons = seasons.filter(s => s.season_number > 0);
             tvSeasonsData = validSeasons.length > 0 ? validSeasons : seasons;
 
@@ -1040,6 +1443,7 @@
             for (let e = 1; e <= 24; e++) {
                 episodeSelect.innerHTML += `<option value="${e}" ${e == defaultEpisode ? 'selected' : ''}>الحلقة ${e}</option>`;
             }
+            renderEpisodeButtonsGrid(24, defaultEpisode);
         }
 
         function populateEpisodesForSelectedSeason(defaultEpisode = 1) {
@@ -1054,6 +1458,31 @@
             for (let e = 1; e <= epCount; e++) {
                 episodeSelect.innerHTML += `<option value="${e}" ${e == defaultEpisode ? 'selected' : ''}>الحلقة ${e}</option>`;
             }
+
+            renderEpisodeButtonsGrid(epCount, defaultEpisode);
+        }
+
+        function renderEpisodeButtonsGrid(epCount, activeEp) {
+            const grid = document.getElementById('episodeButtonsGrid');
+            const countBadge = document.getElementById('episodeGridCount');
+            if (!grid) return;
+
+            if (countBadge) countBadge.textContent = `${epCount} حلقة`;
+            grid.innerHTML = '';
+
+            for (let e = 1; e <= epCount; e++) {
+                const isSelected = e == activeEp;
+                const btn = document.createElement('button');
+                btn.textContent = e;
+                btn.className = isSelected
+                    ? "bg-brand-500 text-white font-black py-2 rounded-xl text-xs shadow-md shadow-brand-500/30 scale-105 transition-all"
+                    : "bg-brand-50 hover:bg-brand-100 text-pastel-text border border-brand-200 font-bold py-2 rounded-xl text-xs transition-all";
+                btn.onclick = () => {
+                    document.getElementById('episodeSelect').value = e;
+                    changeEpisode();
+                };
+                grid.appendChild(btn);
+            }
         }
 
         function onSeasonChange() {
@@ -1067,8 +1496,10 @@
                 const season = document.getElementById('seasonSelect').value;
                 const episode = document.getElementById('episodeSelect').value;
                 const title = document.getElementById('viewTitle').textContent;
+                const epCount = document.getElementById('episodeSelect').options.length;
 
-                // Update URL query params cleanly
+                renderEpisodeButtonsGrid(epCount, episode);
+
                 try {
                     const url = new URL(window.location.href);
                     url.searchParams.set('s', season);
@@ -1156,7 +1587,7 @@
         }
 
         // =========================================================
-        // CATALOG LOGIC
+        // CATALOG LOGIC & CURATED HORIZONTAL ROWS
         // =========================================================
         function checkWelcomeNotice() {
             const hasSeenNotice = sessionStorage.getItem('has_seen_ad_notice');
@@ -1172,10 +1603,12 @@
 
         async function initApp() {
             renderContinueWatching();
+            loadCuratedHomeRows();
             loadTrending();
         }
 
         async function fetchTMDB(endpoint, params = {}) {
+            startTopProgress();
             try {
                 const url = new URL(`${TMDB_BASE}${endpoint}`);
                 url.searchParams.append('api_key', apiKey);
@@ -1186,29 +1619,126 @@
                 const res = await fetch(url);
                 if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
                 const data = await res.json();
+                finishTopProgress();
                 return data;
             } catch (err) {
                 console.warn("TMDB Fetch warning:", err);
+                finishTopProgress();
                 return null;
             }
         }
 
+        async function loadCuratedHomeRows() {
+            // 1. Romance & Drama
+            const romanceData = await fetchTMDB('/discover/movie', { with_genres: '10749,18', sort_by: 'popularity.desc' });
+            if (romanceData && romanceData.results) {
+                renderHorizontalRow('rowRomanceGrid', romanceData.results.slice(0, 12), 'movie');
+            }
+
+            // 2. Top Rated
+            const topRatedData = await fetchTMDB('/movie/top_rated');
+            if (topRatedData && topRatedData.results) {
+                renderHorizontalRow('rowTopRatedGrid', topRatedData.results.slice(0, 12), 'movie');
+            }
+
+            // 3. Animation / Anime
+            const animeData = await fetchTMDB('/discover/tv', { with_genres: '16', sort_by: 'popularity.desc' });
+            if (animeData && animeData.results) {
+                renderHorizontalRow('rowAnimeGrid', animeData.results.slice(0, 12), 'tv');
+            }
+        }
+
+        function renderHorizontalRow(containerId, items, defaultType) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+
+            items.forEach(item => {
+                const title = item.title || item.name;
+                const type = item.media_type || defaultType;
+                const rating = item.vote_average ? item.vote_average.toFixed(1) : '8.0';
+                const poster = item.poster_path ? `${IMAGE_BASE}${item.poster_path}` : 'https://placehold.co/300x450/ffe4ed/be1241?text=Poster';
+                const isFav = watchlist.some(w => w.id === item.id);
+
+                const card = document.createElement('div');
+                card.className = "shrink-0 w-36 sm:w-44 movie-card glass-card border border-brand-200 rounded-2xl overflow-hidden shadow-sm cursor-pointer group relative";
+                card.innerHTML = `
+                    <div class="relative aspect-[2/3] bg-brand-100 overflow-hidden">
+                        <img src="${poster}" alt="${title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        <div class="absolute top-2 right-2 bg-white/90 px-2 py-0.5 rounded-full text-amber-600 text-[10px] font-extrabold shadow-sm">
+                            ⭐ ${rating}
+                        </div>
+                        <button onclick="quickToggleCardFav(event, ${item.id}, '${type}', '${escapeQuotes(title)}', '${item.poster_path || ''}', ${item.vote_average || 8.0})" 
+                            class="absolute top-2 left-2 w-7 h-7 rounded-full bg-white/90 hover:bg-white flex items-center justify-center shadow-sm transition-transform hover:scale-110">
+                            <i class="${isFav ? 'fa-solid text-brand-500' : 'fa-regular text-pastel-muted'} fa-heart text-xs"></i>
+                        </button>
+                    </div>
+                    <div class="p-2.5">
+                        <h4 class="font-extrabold text-xs text-pastel-text truncate group-hover:text-brand-600">${title}</h4>
+                    </div>
+                `;
+                card.onclick = () => navigateToWatchPage(item.id, type, title, item.poster_path || '', 1, 1);
+                container.appendChild(card);
+            });
+        }
+
         async function loadTrending() {
             showLoader(true);
-            let data = await fetchTMDB('/trending/all/day');
+            currentPage = 1;
+            currentEndpoint = '/trending/all/day';
+            currentParams = {};
+
+            let data = await fetchTMDB(currentEndpoint, { page: currentPage });
             
             if (data && data.results && data.results.length > 0) {
                 currentItems = data.results.filter(item => item.media_type === 'movie' || item.media_type === 'tv');
+                toggleLoadMore(data.page < data.total_pages);
             } else {
                 currentItems = fallbackCatalog;
+                toggleLoadMore(false);
             }
 
             if (currentItems.length > 0) {
                 setupHeroBanner(currentItems[0]);
             }
 
-            renderGrid(currentItems);
+            renderGrid(currentItems, false);
             showLoader(false);
+        }
+
+        async function loadMoreItems() {
+            const btn = document.getElementById('loadMoreBtn');
+            if (btn) btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> جاري التحميل...`;
+
+            currentPage += 1;
+            const data = await fetchTMDB(currentEndpoint, { ...currentParams, page: currentPage });
+
+            if (data && data.results && data.results.length > 0) {
+                const defaultType = currentEndpoint.includes('/tv') ? 'tv' : 'movie';
+                const newItems = data.results
+                    .filter(i => !i.media_type || i.media_type === 'movie' || i.media_type === 'tv')
+                    .map(i => ({ ...i, media_type: i.media_type || defaultType }));
+
+                currentItems = [...currentItems, ...newItems];
+                renderGrid(newItems, true);
+                toggleLoadMore(data.page < data.total_pages);
+            } else {
+                toggleLoadMore(false);
+            }
+
+            if (btn) btn.innerHTML = `<i class="fa-solid fa-plus"></i> عرض المزيد من الأعمال`;
+        }
+
+        function toggleLoadMore(show) {
+            const container = document.getElementById('loadMoreContainer');
+            if (!container) return;
+            if (show) {
+                container.classList.remove('hidden');
+                container.classList.add('flex');
+            } else {
+                container.classList.add('hidden');
+                container.classList.remove('flex');
+            }
         }
 
         function setupHeroBanner(item) {
@@ -1239,23 +1769,56 @@
             heroDetailBtn.onclick = () => openDetailsModal(item);
         }
 
-        function renderGrid(items) {
+        // Quick Favorite Toggle Directly on Cards
+        function quickToggleCardFav(evt, id, mediaType, title, posterPath, voteAvg) {
+            evt.stopPropagation();
+            const btn = evt.currentTarget;
+            const icon = btn.querySelector('i');
+            const index = watchlist.findIndex(i => i.id == id);
+
+            if (index >= 0) {
+                watchlist.splice(index, 1);
+                icon.className = 'fa-regular text-pastel-muted fa-heart text-xs';
+                showToast('تمت الإزالة من المفضلة');
+            } else {
+                watchlist.push({
+                    id: Number(id),
+                    title: title,
+                    name: title,
+                    media_type: mediaType,
+                    poster_path: posterPath,
+                    vote_average: voteAvg
+                });
+                icon.className = 'fa-solid text-brand-500 fa-heart text-xs heart-pop';
+                showToast('تمت الإضافة إلى المفضلة 💖');
+            }
+
+            localStorage.setItem('user_watchlist', JSON.stringify(watchlist));
+            if (currentTab === 'watchlist') {
+                renderGrid(watchlist, false);
+            }
+        }
+
+        function renderGrid(items, append = false) {
             const mediaGrid = document.getElementById('mediaGrid');
             const emptyState = document.getElementById('emptyState');
             const resultCount = document.getElementById('resultCount');
 
-            mediaGrid.innerHTML = '';
+            if (!append) {
+                mediaGrid.innerHTML = '';
+            }
             
-            if (!items || items.length === 0) {
+            if (!items || (items.length === 0 && !append)) {
                 emptyState.classList.remove('hidden');
                 emptyState.classList.add('flex');
                 resultCount.textContent = '';
+                toggleLoadMore(false);
                 return;
             }
 
             emptyState.classList.add('hidden');
             emptyState.classList.remove('flex');
-            resultCount.textContent = `${items.length} عمل`;
+            resultCount.textContent = `${currentItems.length} عمل`;
 
             items.forEach(item => {
                 const title = item.title || item.name;
@@ -1263,6 +1826,7 @@
                 const year = (item.release_date || item.first_air_date || '').substring(0, 4);
                 const rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
                 const poster = item.poster_path ? `${IMAGE_BASE}${item.poster_path}` : 'https://placehold.co/300x450/ffe4ed/be1241?text=لا+يوجد+بوستر';
+                const isFav = watchlist.some(w => w.id == item.id);
 
                 const card = document.createElement('div');
                 card.className = "movie-card glass-card border border-brand-200/90 rounded-2xl overflow-hidden shadow-md shadow-brand-500/5 group hover:border-brand-400 flex flex-col justify-between cursor-pointer animate-fade-in";
@@ -1273,7 +1837,11 @@
                         <div class="absolute top-2 right-2 bg-white/90 backdrop-blur-md px-2 py-0.5 rounded-full text-amber-600 text-[10px] sm:text-xs font-extrabold flex items-center gap-1 shadow-sm">
                             <i class="fa-solid fa-star text-amber-500"></i> ${rating}
                         </div>
-                        <div class="absolute top-2 left-2 bg-brand-500 text-white text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-sm">
+                        <button onclick="quickToggleCardFav(event, ${item.id}, '${type}', '${escapeQuotes(title)}', '${item.poster_path || ''}', ${item.vote_average || 8.0})" 
+                            class="absolute top-2 left-2 z-10 w-8 h-8 rounded-full bg-white/90 hover:bg-white flex items-center justify-center shadow-md transition-transform hover:scale-110" title="المفضلة">
+                            <i class="${isFav ? 'fa-solid text-brand-500' : 'fa-regular text-pastel-muted'} fa-heart text-xs sm:text-sm"></i>
+                        </button>
+                        <div class="absolute bottom-2 left-2 bg-brand-500/95 text-white text-[9px] sm:text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow-sm">
                             ${type === 'tv' ? 'مسلسل' : 'فيلم'}
                         </div>
                         
@@ -1339,6 +1907,7 @@
 
         async function switchTab(tab) {
             currentTab = tab;
+            currentPage = 1;
             
             ['home', 'movies', 'tv', 'watchlist', 'history'].forEach(t => {
                 const el = document.getElementById(`nav-${t}`);
@@ -1361,37 +1930,50 @@
 
             const sectionTitle = document.getElementById('sectionTitle');
             const heroBanner = document.getElementById('heroBanner');
+            const curatedRows = document.getElementById('curatedRowsContainer');
 
             if (tab === 'home') {
-                sectionTitle.innerHTML = `<span class="w-2 h-6 bg-gradient-to-b from-brand-400 to-brand-600 rounded-full inline-block"></span> الأكثر تداولاً اليوم على سلاكس سينما`;
+                curatedRows.classList.remove('hidden');
+                sectionTitle.innerHTML = `<span class="w-2 h-6 bg-gradient-to-b from-brand-400 to-brand-600 rounded-full inline-block"></span> الأكثر رواجاً اليوم`;
                 renderContinueWatching();
                 loadTrending();
             } else if (tab === 'movies') {
                 heroBanner.classList.add('hidden');
+                curatedRows.classList.add('hidden');
                 document.getElementById('continueWatchingSection').classList.add('hidden');
                 sectionTitle.innerHTML = `<span class="w-2 h-6 bg-gradient-to-b from-brand-400 to-brand-600 rounded-full inline-block"></span> الأفلام الشائعة`;
                 showLoader(true);
-                let data = await fetchTMDB('/movie/popular');
+                currentEndpoint = '/movie/popular';
+                currentParams = {};
+                let data = await fetchTMDB(currentEndpoint, { page: 1 });
                 currentItems = data ? data.results.map(i => ({...i, media_type: 'movie'})) : fallbackCatalog.filter(i=>i.media_type==='movie');
-                renderGrid(currentItems);
+                renderGrid(currentItems, false);
+                toggleLoadMore(data && data.page < data.total_pages);
                 showLoader(false);
             } else if (tab === 'tv') {
                 heroBanner.classList.add('hidden');
+                curatedRows.classList.add('hidden');
                 document.getElementById('continueWatchingSection').classList.add('hidden');
                 sectionTitle.innerHTML = `<span class="w-2 h-6 bg-gradient-to-b from-brand-400 to-brand-600 rounded-full inline-block"></span> المسلسلات الشائعة`;
                 showLoader(true);
-                let data = await fetchTMDB('/tv/popular');
+                currentEndpoint = '/tv/popular';
+                currentParams = {};
+                let data = await fetchTMDB(currentEndpoint, { page: 1 });
                 currentItems = data ? data.results.map(i => ({...i, media_type: 'tv'})) : fallbackCatalog.filter(i=>i.media_type==='tv');
-                renderGrid(currentItems);
+                renderGrid(currentItems, false);
+                toggleLoadMore(data && data.page < data.total_pages);
                 showLoader(false);
             } else if (tab === 'watchlist') {
                 heroBanner.classList.add('hidden');
+                curatedRows.classList.add('hidden');
                 document.getElementById('continueWatchingSection').classList.add('hidden');
                 sectionTitle.innerHTML = `<span class="w-2 h-6 bg-gradient-to-b from-brand-400 to-brand-600 rounded-full inline-block"></span> قائمة المفضلة الخاصة بك`;
                 currentItems = watchlist;
-                renderGrid(currentItems);
+                renderGrid(currentItems, false);
+                toggleLoadMore(false);
             } else if (tab === 'history') {
                 heroBanner.classList.add('hidden');
+                curatedRows.classList.add('hidden');
                 document.getElementById('continueWatchingSection').classList.add('hidden');
                 sectionTitle.innerHTML = `<span class="w-2 h-6 bg-gradient-to-b from-brand-400 to-brand-600 rounded-full inline-block"></span> سجل المشاهدة`;
                 currentItems = watchHistory.map(h => ({
@@ -1401,7 +1983,8 @@
                     media_type: h.type,
                     poster_path: h.poster_path
                 }));
-                renderGrid(currentItems);
+                renderGrid(currentItems, false);
+                toggleLoadMore(false);
             }
         }
 
@@ -1414,18 +1997,23 @@
             }
 
             if (genreId === 'all') {
-                renderGrid(currentItems);
+                switchTab(currentTab);
                 return;
             }
 
             showLoader(true);
-            const endpoint = currentTab === 'tv' ? '/discover/tv' : '/discover/movie';
-            let data = await fetchTMDB(endpoint, { with_genres: genreId });
-            
+            currentPage = 1;
+            currentEndpoint = currentTab === 'tv' ? '/discover/tv' : '/discover/movie';
+            currentParams = { with_genres: genreId };
+
+            let data = await fetchTMDB(currentEndpoint, { ...currentParams, page: 1 });
             if (data && data.results) {
-                renderGrid(data.results.map(i => ({...i, media_type: currentTab === 'tv' ? 'tv' : 'movie'})));
+                currentItems = data.results.map(i => ({...i, media_type: currentTab === 'tv' ? 'tv' : 'movie'}));
+                renderGrid(currentItems, false);
+                toggleLoadMore(data.page < data.total_pages);
             } else {
-                renderGrid([]);
+                currentItems = [];
+                renderGrid([], false);
             }
             showLoader(false);
         }
@@ -1443,25 +2031,29 @@
             const minRating = document.getElementById('filterMinRating').value;
             const year = document.getElementById('filterYear').value;
 
-            const endpoint = currentTab === 'tv' ? '/discover/tv' : '/discover/movie';
-            const params = {
+            currentPage = 1;
+            currentEndpoint = currentTab === 'tv' ? '/discover/tv' : '/discover/movie';
+            currentParams = {
                 sort_by: sortBy,
                 'vote_average.gte': minRating
             };
 
             if (year) {
                 if (currentTab === 'tv') {
-                    params['first_air_date_year'] = year;
+                    currentParams['first_air_date_year'] = year;
                 } else {
-                    params['primary_release_year'] = year;
+                    currentParams['primary_release_year'] = year;
                 }
             }
 
-            let data = await fetchTMDB(endpoint, params);
+            let data = await fetchTMDB(currentEndpoint, { ...currentParams, page: 1 });
             if (data && data.results) {
-                renderGrid(data.results.map(i => ({...i, media_type: currentTab === 'tv' ? 'tv' : 'movie'})));
+                currentItems = data.results.map(i => ({...i, media_type: currentTab === 'tv' ? 'tv' : 'movie'}));
+                renderGrid(currentItems, false);
+                toggleLoadMore(data.page < data.total_pages);
             } else {
-                renderGrid([]);
+                currentItems = [];
+                renderGrid([], false);
             }
 
             showLoader(false);
@@ -1487,15 +2079,22 @@
             searchTimeout = setTimeout(async () => {
                 showLoader(true);
                 document.getElementById('heroBanner').classList.add('hidden');
+                document.getElementById('curatedRowsContainer').classList.add('hidden');
                 document.getElementById('continueWatchingSection').classList.add('hidden');
                 document.getElementById('sectionTitle').innerHTML = `<span class="w-2 h-6 bg-gradient-to-b from-brand-400 to-brand-600 rounded-full inline-block"></span> نتائج البحث عن: "${query}"`;
                 
-                let data = await fetchTMDB('/search/multi', { query: query });
+                currentPage = 1;
+                currentEndpoint = '/search/multi';
+                currentParams = { query: query };
+
+                let data = await fetchTMDB(currentEndpoint, { ...currentParams, page: 1 });
                 if (data && data.results) {
-                    const filtered = data.results.filter(i => i.media_type === 'movie' || i.media_type === 'tv');
-                    renderGrid(filtered);
+                    currentItems = data.results.filter(i => i.media_type === 'movie' || i.media_type === 'tv');
+                    renderGrid(currentItems, false);
+                    toggleLoadMore(data.page < data.total_pages);
                 } else {
-                    renderGrid([]);
+                    currentItems = [];
+                    renderGrid([], false);
                 }
                 showLoader(false);
             }, 500);
@@ -1513,7 +2112,7 @@
             watchHistory = [];
             localStorage.removeItem('user_history');
             renderContinueWatching();
-            if (currentTab === 'history') renderGrid([]);
+            if (currentTab === 'history') renderGrid([], false);
             showToast('تم مسح سجل المشاهدة');
         }
 
@@ -1668,7 +2267,7 @@
             localStorage.setItem('user_watchlist', JSON.stringify(watchlist));
             updateFavButtonUI();
             if (currentTab === 'watchlist') {
-                renderGrid(watchlist);
+                renderGrid(watchlist, false);
             }
         }
 
